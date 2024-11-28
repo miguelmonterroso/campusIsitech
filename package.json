@@ -26,7 +26,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "flyonui": "^1.1.0",
-    "framer-motion": "^11.11.17",
+    "framer-motion": "^11.12.0",
     "lucide-react": "^0.461.0",
     "next": "14.2.16",
     "react": "^18",

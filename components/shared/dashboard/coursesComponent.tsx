@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress"
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import BlurFade from "@/components/ui/blur-fade";
+import CourseInformation from "@/components/courses/courseInformation";
 
 const courses = [
   {
@@ -30,38 +30,12 @@ export default function CoursesComponent() {
   if (selectedCourse !== null) {
     const course = courses.find((c) => c.id === selectedCourse);
     return (
-      <BlurFade delay={0.5} inView>
-        <div className="p-6">
-          <Button variant="ghost" onClick={() => setSelectedCourse(null)}>
-            {"< Volver a los Cursos"}
-          </Button>
-          <div className="mt-4">
-            <h2 className="text-2xl font-bold">{course?.name}</h2>
-            <Image src={course?.image ? course?.image : ""} alt={"IMAGE COURSE"} width={100} height={100}/>
-            <p className="mt-4">{course?.description}</p>
-            <div className="mt-6">
-              <h3 className="text-xl font-semibold">Contenido del Curso</h3>
-              <ul className="mt-2 space-y-4">
-                <li>
-                  <Button variant="outline" onClick={() => alert("Accediendo a los videos del curso...")}>
-                    Ver Videos de Clases Anteriores
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="outline" onClick={() => alert("Accediendo al material de estudio...")}>
-                    Material de Estudio
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="outline" onClick={() => alert("Accediendo a los ejercicios...")}>
-                    Ejercicios
-                  </Button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </BlurFade>
+      <CourseInformation
+        name={course?.name ?? ""}
+        image={course?.image ?? ""}
+        description={course?.description ?? ""}
+        onBack={() => setSelectedCourse(null)} 
+      />
     );
   }
 
