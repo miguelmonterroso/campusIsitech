@@ -8,6 +8,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useEffect, useState } from "react";
 import AnimatedCircularProgressBar from "@/components/ui/animated-circular-progress-bar";
 import CustomTree from "@/components/tree";
+import BlurFade from "@/components/ui/blur-fade";
 
 type DashboardComponentProps = {
     onSelect: (section: string) => void;
@@ -95,17 +96,20 @@ export default function DashboardComponent({ onSelect }: DashboardComponentProps
   ];
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold">
-        Bienvenido {user?.name}
-      </h2>
+    <BlurFade delay={0.5} inView>
       <div>
-        <BentoGrid>
-            {features.map((feature, idx) => (
-            <BentoCard key={idx} {...feature} />
-            ))}
-        </BentoGrid>
+        <h2 className="text-xl font-semibold">
+          Bienvenido {user?.name}
+        </h2>
+        <div>
+          <BentoGrid>
+              {features.map((feature, idx) => (
+              <BentoCard key={idx} {...feature} />
+              ))}
+          </BentoGrid>
+        </div>
       </div>
-    </div>
+    </BlurFade>
+
   );
 }

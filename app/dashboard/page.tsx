@@ -10,6 +10,7 @@ import CoursesComponent from "@/components/shared/dashboard/coursesComponent";
 import ProgressComponent from "@/components/shared/dashboard/progressComponent";
 import SettingComponent from "@/components/shared/dashboard/settingComponent";
 import DashboardComponent from "@/components/shared/dashboard/dashboardComponent";
+import BlurFade from "@/components/ui/blur-fade";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -83,7 +84,9 @@ export default function Dashboard() {
         <main className="flex flex-col">
           <SidebarTrigger />
           <div className="pl-10">
+          <BlurFade delay={0.5} inView>
             {renderContent()}
+          </BlurFade>
           </div>
         </main>
       </SidebarProvider>
