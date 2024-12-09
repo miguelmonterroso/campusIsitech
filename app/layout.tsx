@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import FlyonuiScript from "@/components/scripts/FlyonuiScript";
+import { AppSidebar } from "@/components/shared/sidebar/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -29,10 +31,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-            {children}
-
-            <FlyonuiScript />
-
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarTrigger />
+          <main className="w-full">
+            <div>{children}</div>
+          </main>
+        </SidebarProvider>
+        <FlyonuiScript />
         <Toaster />
       </body>
     </html>

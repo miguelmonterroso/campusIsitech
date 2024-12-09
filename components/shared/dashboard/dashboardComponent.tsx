@@ -10,11 +10,8 @@ import AnimatedCircularProgressBar from "@/components/ui/animated-circular-progr
 import CustomTree from "@/components/tree";
 import BlurFade from "@/components/ui/blur-fade";
 
-type DashboardComponentProps = {
-    onSelect: (section: string) => void;
-  };
 
-export default function DashboardComponent({ onSelect }: DashboardComponentProps) {
+export default function DashboardComponent() {
   const { user } = useAuthStore();
   const [value, setValue] = useState(0);
 
@@ -35,7 +32,7 @@ export default function DashboardComponent({ onSelect }: DashboardComponentProps
       Icon: UserPen,
       name: "Actualiza tu perfil",
       description: "Manten actualizado tu perfil",
-      onClick: () => onSelect("Configuración"),
+      // onClick: () => onSelect("Configuración"),
       cta: "Ver perfil",
       className: "col-span-3 lg:col-span-1",
       background: (
@@ -48,7 +45,7 @@ export default function DashboardComponent({ onSelect }: DashboardComponentProps
       Icon: ClipboardCheck,
       name: "Ver tu progreso",
       description: "No bajes la guardia",
-      onClick: () => onSelect("Progreso"),
+      // onClick: () => onSelect("Progreso"),
       cta: "Ver Progreso",
       className: "col-span-3 lg:col-span-2",
       background: (
@@ -68,7 +65,7 @@ export default function DashboardComponent({ onSelect }: DashboardComponentProps
       Icon: FileTextIcon,
       name: "Material de Estudio",
       description: "Acceso rápido a todos los materiales del curso.",
-      onClick: () => onSelect("Cursos"),
+      // onClick: () => onSelect("Cursos"),
       cta: "Ver Material",
       className: "col-span-3 lg:col-span-2",
       background: (
@@ -83,7 +80,7 @@ export default function DashboardComponent({ onSelect }: DashboardComponentProps
       name: "Calendario de clases",
       description: "Mantente al tanto de tus clases, no pierdas ningun detalle.",
       className: "col-span-3 lg:col-span-1",
-      onClick: () => onSelect("Calendario"),
+      // onClick: () => onSelect("Calendario"),
       cta: "Ver Calendario",
       background: (
         <Calendar

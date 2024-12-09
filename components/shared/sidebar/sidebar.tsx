@@ -1,5 +1,6 @@
+'use client';
+
 import {
-  // Calendar,
   ChevronUp,
   Home,
   Settings,
@@ -8,6 +9,8 @@ import {
   Clipboard,
   Calendar1,
 } from "lucide-react";
+
+import useAuthStore from "@/store/auth/AuthStore";
 
 import {
   Sidebar,
@@ -58,7 +61,16 @@ const items = [
 
 ];
 
-export function AppSidebar({ onSelect }: { onSelect: (section: string) => void }) {
+export function AppSidebar() {
+  const { isAuthenticated } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return (
+      <div className="hidden">
+      </div>
+    );
+  }
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -83,11 +95,7 @@ export function AppSidebar({ onSelect }: { onSelect: (section: string) => void }
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onSelect(item.title);
-                      }}
+                      href={item.url}
                     >
                       <item.icon />
                       <span>{item.title}</span>
