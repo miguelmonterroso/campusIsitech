@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import BlurFade from "@/components/ui/blur-fade";
-import HeroVideoDialog from "../ui/hero-video-dialog";
+import VideoComponent from "./videoComponente";
 
 type CourseInformationProps = {
   name: string;
@@ -19,167 +19,13 @@ export default function CourseInformation({
 }: CourseInformationProps) {
   const [selectedContent, setSelectedContent] = useState<string | null>(null);
 
+
+
   const renderContent = () => {
     switch (selectedContent) {
       case "videos":
         return (
-          <div className="mt-4 p-3 border rounded-md flex gap-4 flex-wrap overflow-auto max-h-[450px] lg:max-h-[550px] grow">
-            {" "}
-            <div className="relative mb-2">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow max-w-[500px]"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p className="mt-3 text-2xl">Clase 1: Javascript Basics</p>
-              <p className="mt-1 text-lg">2024-11-12</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/Iczqotmm5sk"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow max-w-[500px]"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/Iczqotmm5sk"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 2</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-            <div className="relative">
-              <HeroVideoDialog
-                className="dark:hidden grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                thumbnailAlt="Hero Video"
-              />
-              <HeroVideoDialog
-                className="hidden dark:block grow"
-                animationStyle="top-in-bottom-out"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                thumbnailAlt="Hero Video"
-              />
-              <p>Clase 3</p>
-            </div>
-          </div>
+          <VideoComponent/>
         );
       case "material":
         return (

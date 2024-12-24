@@ -52,7 +52,7 @@ export default function Dashboard() {
 
   return (
     <div>
-        <main className="flex flex-col">
+        <main className="flex flex-col min-h-[90vh] justify-center">
           <div className="pt-6">
           <BlurFade delay={0.5} inView>
             <DashboardComponent/>

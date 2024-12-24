@@ -1,6 +1,5 @@
 'use client';
 
-import useAuthStore from "@/store/auth/AuthStore";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { ClipboardCheck, FileTextIcon, UserPen } from "lucide-react";
 import { CalendarIcon } from "@radix-ui/react-icons";
@@ -12,7 +11,6 @@ import BlurFade from "@/components/ui/blur-fade";
 
 
 export default function DashboardComponent() {
-  const { user } = useAuthStore();
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -94,17 +92,12 @@ export default function DashboardComponent() {
 
   return (
     <BlurFade delay={0.5} inView>
-      <div>
-        <h2 className="text-xl font-semibold">
-          Bienvenido {user?.name}
-        </h2>
-        <div>
+      <div className="p-4">
           <BentoGrid>
               {features.map((feature, idx) => (
               <BentoCard key={idx} {...feature} />
               ))}
           </BentoGrid>
-        </div>
       </div>
     </BlurFade>
 
