@@ -30,7 +30,7 @@ const BentoCard = ({
   Icon,
   description,
   cta,
-  onClick,
+  href,
 }: {
   name: string;
   className: string;
@@ -38,7 +38,7 @@ const BentoCard = ({
   Icon: ElementType;
   description: string;
   cta: string;
-  onClick?: () => void; 
+  href?: string; 
 }) => (
   <div
     key={name}
@@ -63,11 +63,13 @@ const BentoCard = ({
         "pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
       )}
     >
-      <Button variant="ghost" size="sm" className="pointer-events-auto" onClick={onClick} 
+      <a href={href}>
+      <Button variant="ghost" size="sm" className="pointer-events-auto" 
       >
           {cta}
           <ArrowRightIcon className="ml-2 h-4 w-4" />
       </Button>
+      </a>
     </div>
     <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10" />
   </div>

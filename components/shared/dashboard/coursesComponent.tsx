@@ -47,7 +47,7 @@ export default function CoursesComponent() {
           {courses.map((course) => (
             <Card
               key={course.id}
-              className="flex flex-col p-4 space-y-4 cursor-pointer shadow-2xl"
+              className="flex flex-col p-4 space-y-4 cursor-pointer shadow-2xl grow"
               onClick={() => setSelectedCourse(course.id)}
             >
               <Image src={course.image} alt={course.name} width={100} height={100}/>

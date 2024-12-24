@@ -32,8 +32,8 @@ export default function DashboardComponent() {
       Icon: UserPen,
       name: "Actualiza tu perfil",
       description: "Manten actualizado tu perfil",
-      // onClick: () => onSelect("Configuración"),
-      cta: "Ver perfil",
+      cta: "Ver Perfil",
+      href: "/account",
       className: "col-span-3 lg:col-span-1",
       background: (
           <div>
@@ -45,7 +45,7 @@ export default function DashboardComponent() {
       Icon: ClipboardCheck,
       name: "Ver tu progreso",
       description: "No bajes la guardia",
-      // onClick: () => onSelect("Progreso"),
+      href:"/progress",
       cta: "Ver Progreso",
       className: "col-span-3 lg:col-span-2",
       background: (
@@ -65,8 +65,8 @@ export default function DashboardComponent() {
       Icon: FileTextIcon,
       name: "Material de Estudio",
       description: "Acceso rápido a todos los materiales del curso.",
-      // onClick: () => onSelect("Cursos"),
-      cta: "Ver Material",
+      href:"/courses",
+      cta: "Ver Materiales",
       className: "col-span-3 lg:col-span-2",
       background: (
           <div className="absolute flex items-center justify-center w-full h-full ml-15">
@@ -80,7 +80,7 @@ export default function DashboardComponent() {
       name: "Calendario de clases",
       description: "Mantente al tanto de tus clases, no pierdas ningun detalle.",
       className: "col-span-3 lg:col-span-1",
-      // onClick: () => onSelect("Calendario"),
+      href:"/calendar",
       cta: "Ver Calendario",
       background: (
         <Calendar
