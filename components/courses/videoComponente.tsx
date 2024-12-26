@@ -52,7 +52,7 @@ export default function VideoComponent() {
   return (
     <div className="mt-4 p-3 border rounded-md flex gap-4 flex-wrap overflow-auto max-h-[450px] lg:max-h-[550px] grow min-h-[50vh]">
       {videos.map((video, index) => (
-        <div key={index} className="relative mb-2">
+        <div key={index} className="relative mb-2 max-w-[350px]">
           <HeroVideoDialog
             className="dark:hidden grow"
             animationStyle="top-in-bottom-out"

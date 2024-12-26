@@ -82,6 +82,44 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+
+  .isitech-dark {
+    --background: 240 10% 7%; /* Fondo oscuro casi negro, ligeramente púrpura */
+    --foreground: 0 0% 95%; /* Blanco ligeramente gris para texto */
+    --card: 275 15% 10%; /* Fondo púrpura oscuro para tarjetas */
+    --card-foreground: 0 0% 98%; /* Blanco puro para texto en tarjetas */
+    --popover: 240 10% 10%; /* Fondo oscuro para popovers */
+    --popover-foreground: 0 0% 95%; /* Blanco para texto */
+    --primary: 275 80% 60%; /* Púrpura brillante para botones principales */
+    --primary-foreground: 0 0% 100%; /* Blanco */
+    --secondary: 275 60% 40%; /* Púrpura oscuro para botones secundarios */
+    --secondary-foreground: 0 0% 95%; /* Blanco ligeramente gris */
+    --muted: 275 30% 15%; /* Púrpura desaturado para elementos secundarios */
+    --muted-foreground: 0 0% 60%; /* Gris claro para texto secundario */
+    --accent: 280 80% 65%; /* Púrpura más vibrante para acentos */
+    --accent-foreground: 0 0% 100%; /* Blanco */
+    --destructive: 0 70% 40%; /* Rojo oscuro para acciones destructivas */
+    --destructive-foreground: 0 0% 95%; /* Blanco */
+    --border: 240 10% 12%; /* Borde oscuro suave */
+    --input: 240 10% 15%; /* Fondo oscuro para campos de entrada */
+    --ring: 275 80% 60%; /* Púrpura brillante para focos */
+    --chart-1: 275 80% 60%; /* Púrpura */
+    --chart-2: 240 10% 30%; /* Azul oscuro para contraste */
+    --chart-3: 280 80% 70%; /* Púrpura más claro */
+    --chart-4: 0 70% 40%; /* Rojo oscuro */
+    --chart-5: 240 10% 7%; /* Fondo oscuro casi negro */
+    --sidebar-background: 240 10% 7%; /* Fondo oscuro casi negro */
+    --sidebar-foreground: 0 0% 95%; /* Blanco ligeramente gris */
+    --sidebar-primary: 275 80% 60%; /* Púrpura brillante */
+    --sidebar-primary-foreground: 0 0% 100%; /* Blanco */
+    --sidebar-accent: 280 60% 50%; /* Púrpura medio */
+    --sidebar-accent-foreground: 0 0% 100%; /* Blanco */
+    --sidebar-border: 240 10% 12%; /* Borde oscuro */
+    --sidebar-ring: 275 80% 60%; /* Púrpura brillante */
+  }
+  
+  
 }
 
 @layer base {

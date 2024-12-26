@@ -62,7 +62,11 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user, logout } = useAuthStore();
+
+  const handleLogOut = () => {
+    logout()
+  }
 
   if (!isAuthenticated) {
     return (
@@ -88,7 +92,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Campus Virtual</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -117,7 +121,7 @@ export function AppSidebar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuButton>
-                      <User2 /> Username
+                      <User2 /> {user?.name}
                       <ChevronUp className="ml-auto" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
@@ -126,13 +130,13 @@ export function AppSidebar() {
                     className="w-[--radix-popper-anchor-width]"
                   >
                     <DropdownMenuItem>
-                      <span>Account</span>
+                      <span>Cuenta</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <span>Billing</span>
+                      <span>Facturación</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <span>Sign out</span>
+                    <DropdownMenuItem onClick={handleLogOut}>
+                      <span>Cerrar sesión</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
