@@ -63,6 +63,7 @@ const items = [
 
 export function AppSidebar() {
   const { isAuthenticated, user, logout } = useAuthStore();
+  console.log(isAuthenticated, user)
 
   const handleLogOut = () => {
     logout()

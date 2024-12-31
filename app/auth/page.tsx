@@ -10,7 +10,7 @@ export default function authPage(){
         <Image src="/isitech.png" width={100} height={100} alt="isitechLogo"/>
         </div>
         <div className="lg:w-1/2 p-10 flex items-center justify-center">
-          <Tabs defaultValue="login" className="w-[400px] min-h-[400px] flex flex-col items-center">
+          <Tabs defaultValue="login" className="w-[400px] min-h-[400px] flex flex-col">
             <TabsList>
               <TabsTrigger value="register">Registrarse</TabsTrigger>
               <TabsTrigger value="login">Ingresar</TabsTrigger>

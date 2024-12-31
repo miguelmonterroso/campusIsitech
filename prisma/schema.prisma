@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String    @unique
-  password      String
-  role          Role      @default(STUDENT)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  courses       Course[]  @relation("StudentCourses")
-  teaching      Course[]  @relation("InstructorCourses")
-  billingInfo   Billing?
+  courses     Enrollment[] 
+  teaching    Course[]     @relation("InstructorCourses") 
+  billingInfo Billing[] 
 }
 
 enum Role {
@@ -27,42 +27,70 @@ enum Role {
 }
 
 model Course {
-  id            Int       @id @default(autoincrement())
-  name          String
-  description   String
-  image         String
-  price         Float
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String
+  image          String
+  price          Float
+  durationMonths Int 
+  startDate      DateTime
+  endDate        DateTime 
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  instructor    User      @relation("InstructorCourses", fields: [instructorId], references: [id])
-  instructorId  Int
-  students      User[]    @relation("StudentCourses")
-  lessons       Lesson[]
-}
+  instructor   User         @relation("InstructorCourses", fields: [instructorId], references: [id])
+  instructorId Int 
+  students     Enrollment[] 
+  lessons      Lesson[] 
+  billings     Billing[] 
 
 model Lesson {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
-  videoUrl    String
-  course      Course    @relation(fields: [courseId], references: [id])
-  courseId    Int
-  createdAt   DateTime  @default(now())
+  videoUrl    String 
+  course      Course   @relation(fields: [courseId], references: [id]) 
+  courseId    Int 
+  createdAt   DateTime @default(now())
 }
 
 model Billing {
-  id          Int       @id @default(autoincrement())
-  user        User      @relation(fields: [userId], references: [id])
-  userId      Int       @unique
-  amount      Float
-  dueDate     DateTime
-  status      Status    @default(PENDING)
-  createdAt   DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id]) 
+  userId    Int 
+  course    Course   @relation(fields: [courseId], references: [id]) 
+  courseId  Int 
+  amount    Float 
+  dueDate   DateTime 
+  status    Status   @default(PENDING) 
+  createdAt DateTime @default(now())
+
+  enrollments Enrollment[] 
 }
 
 enum Status {
   PENDING
   PAID
   OVERDUE
+}
+
+model Enrollment {
+  id        Int      @id @default(autoincrement())
+  student   User     @relation(fields: [studentId], references: [id]) 
+  studentId Int 
+  course    Course   @relation(fields: [courseId], references: [id]) 
+  courseId  Int 
+  billing   Billing? @relation(fields: [billingId], references: [id]) 
+  billingId Int? 
+
+  status    EnrollmentStatus @default(PENDING)
+  createdAt DateTime         @default(now()) 
+
+  @@unique([studentId, courseId]) 
+}
+
+enum EnrollmentStatus {
+  PENDING
+  ACTIVE
+  CANCELLED
 }

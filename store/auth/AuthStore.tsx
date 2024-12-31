@@ -1,24 +1,19 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
+  role: string;
+  token: string;
 };
 
 type AuthState = {
   user: User | null;
   isAuthenticated: boolean;
-  login: (userData: User) => void;
-  loginWithTestUser: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-};
-
-const TEST_USER: User = {
-  id: 'test_user_123',
-  name: 'Usuario de Prueba',
-  email: 'test@example.com',
 };
 
 const useAuthStore = create<AuthState>()(
@@ -26,19 +21,34 @@ const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      login: (userData: User) => set({ user: userData, isAuthenticated: true }),
-      loginWithTestUser: (email: string, password: string) => {
-        // Datos de prueba
-        if (email === 'test@example.com' && password === 'password') {
-          set({ user: TEST_USER, isAuthenticated: true });
-        } else {
-          alert('Credenciales incorrectas. Usa email: test@example.com y contraseña: password');
+      login: async (email: string, password: string) => {
+        try {
+          const response = await fetch("/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Credenciales incorrectas");
+          }
+
+          const data = await response.json();
+          const { token, user } = data;
+
+          set({
+            user: { ...user, token },
+            isAuthenticated: true,
+          });
+        } catch (error) {
+          console.error("Error durante el inicio de sesión:", error);
+          throw new Error("Inicio de sesión fallido. Verifica tus credenciales.");
         }
       },
       logout: () => set({ user: null, isAuthenticated: false }),
     }),
     {
-      name: 'auth-storage',
+      name: "auth-storage",
     }
   )
 );

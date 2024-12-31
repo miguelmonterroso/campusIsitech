@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,20 +13,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "@/hooks/use-toast"
-import useAuthStore from "@/store/auth/AuthStore"
-import { useRouter } from "next/navigation"
-import { Eye, EyeOff } from "lucide-react" 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
+import useAuthStore from "@/store/auth/AuthStore";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import BlurFade from "@/components/ui/blur-fade";
 
 const FormSchema = z.object({
   email: z.string().email("Ingresa un correo válido."),
   password: z.string().min(6, {
     message: "La contraseña debe tener al menos 6 caracteres.",
   }),
-})
+});
 
 export default function LoginForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -35,37 +41,41 @@ export default function LoginForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
-  const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
-  const { loginWithTestUser } = useAuthStore()
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const { login } = useAuthStore();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { email, password } = data
-    loginWithTestUser(email, password)
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const { email, password } = data;
+    try {
+      await login(email, password);
 
-    if (useAuthStore.getState().isAuthenticated) {
       toast({
         title: "Inicio de sesión exitoso",
         description: "Redirigiendo al dashboard...",
-        duration: 1400
-      })
-      router.push("/dashboard")
-    } else {
+        duration: 1400,
+      });
+
+      router.push("/dashboard");
+    } catch (error: unknown) {
       toast({
         title: "Error",
-        description: "Correo o contraseña incorrectos. Usa: email: test@example.com, contraseña: password",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Ocurrió un error durante el inicio de sesión.",
         variant: "destructive",
-        duration: 1400
-      })
+        duration: 1400,
+      });
     }
   }
 
   return (
+    <BlurFade inView={true} delay={0.5}>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-        {/* Campo de Email */}
         <FormField
           control={form.control}
           name="email"
@@ -82,7 +92,6 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        {/* Campo de Contraseña */}
         <FormField
           control={form.control}
           name="password"
@@ -120,16 +129,15 @@ export default function LoginForm() {
                   </TooltipProvider>
                 </div>
               </div>
-              <FormDescription>
-                Ingresa tu contraseña.
-              </FormDescription>
+              <FormDescription>Ingresa tu contraseña.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* Botón de Enviar */}
         <Button type="submit">Iniciar Sesión</Button>
       </form>
     </Form>
-  )
+    </BlurFade>
+
+  );
 }
