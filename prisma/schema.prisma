@@ -43,6 +43,7 @@ model Course {
   students     Enrollment[] 
   lessons      Lesson[] 
   billings     Billing[] 
+}
 
 model Lesson {
   id          Int      @id @default(autoincrement())
