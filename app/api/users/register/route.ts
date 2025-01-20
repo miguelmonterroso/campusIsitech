@@ -76,7 +76,6 @@ export async function POST(req: Request) {
               max-width: 600px;
               margin: 0 auto;
               background-color: #101541;
-              color: white;
               border-radius: 8px;
               box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
@@ -84,15 +83,20 @@ export async function POST(req: Request) {
               background: rgb(161,38,250);
               background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);              
               padding: 20px;
-              color: #ffffff;
+              color: #fff;
               text-align: center;
               border-radius: 8px 8px 0 0;
+            }
+            .content{
+              background-color: #101541;
+              padding: 20px;
             }
             .button {
               display: inline-block;
               padding: 10px 20px;
               background: rgb(161,38,250);
-              background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);                color: #fff;
+              background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);                
+              color: #fff;
               text-decoration: none;
               border-radius: 5px;
               font-weight: bold;
@@ -110,7 +114,7 @@ export async function POST(req: Request) {
             <div class="header">
               <h1>Bienvenido a Isitech, ${name}!</h1>
             </div>
-            <div style="padding: 20px;">
+            <div class="content">
                 <h2>
                     Gracias por registrarte en Isitech. 
                 </h2>
