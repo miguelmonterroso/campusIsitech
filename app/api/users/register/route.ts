@@ -97,7 +97,7 @@ export async function POST(req: Request) {
         padding: 10px 20px;
         background: rgb(161,38,250);
         background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);
-        color: #fff;
+        color: #ffff;
         text-decoration: none;
         border-radius: 5px;
         font-weight: bold;
@@ -144,9 +144,6 @@ export async function POST(req: Request) {
           <h2>Gracias por registrarte en Isitech.</h2>
           <p>Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
           <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
-          <div style="width: 100%; height: 100%; display: flex; justify-content: flex-end;">
-            <img src="https://www.isitech.com.gt/_next/image?url=%2FimageHeader.avif&w=1200&q=75" alt="robot" style="width: 300px; height: 300px; margin-top: -50px; margin-bottom: -20px; margin-right: -20px;">
-          </div>
         </td>
       </tr>
       <tr>
