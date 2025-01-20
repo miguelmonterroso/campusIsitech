@@ -62,73 +62,74 @@ export async function POST(req: Request) {
     const subject = "¡Bienvenido a Isitech!";
     const text = `Hola ${name}, gracias por registrarte en Isitech.`;
     const html = `
-      <html>
-        <head>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background-color: #101541;
-              margin: 0;
-              padding: 0;
-            }
-            .container {
-              width: 100%;
-              max-width: 600px;
-              margin: 0 auto;
-              background-color: #101541;
-              border-radius: 8px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .header {
-              background: rgb(161,38,250);
-              background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);              
-              padding: 20px;
-              color: #fff;
-              text-align: center;
-              border-radius: 8px 8px 0 0;
-            }
-            .content{
-              background-color: #101541;
-              padding: 20px;
-            }
-            .button {
-              display: inline-block;
-              padding: 10px 20px;
-              background: rgb(161,38,250);
-              background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);                
-              color: #fff;
-              text-decoration: none;
-              border-radius: 5px;
-              font-weight: bold;
-            }
-            .footer {
-              background-color: #093151;
-              text-align: center;
-              padding: 10px;
-              font-size: 12px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container" style="background-color: #101541;">
-            <div class="header">
-              <h1>Bienvenido a Isitech, ${name}!</h1>
-            </div>
-            <div class="content">
-                <h2>
-                    Gracias por registrarte en Isitech. 
-                </h2>
-                
-              <p> Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
-              <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
-            </div>
-            <div class="footer">
-                <img src="https://campus-isitech.vercel.app/isitech.png" alt="logo.png">
-              <p>Este es un correo automático. Si tienes alguna duda, no dudes en contactarnos.</p>
-            </div>
-          </div>
-        </body>
-      </html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #101541;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #101541; 
+        background-image: url('https://www.isitech.com.gt/bg.avif');
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background: rgb(161,38,250);
+        background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);
+        padding: 20px;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background: rgb(161,38,250);
+        background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .footer {
+        background-color: #093151 !important;
+        text-align: center;
+        padding: 10px;
+        font-size: 12px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Bienvenido a Isitech, ${name}!</h1>
+      </div>
+      <div style="padding: 20px;">
+        <h2>Gracias por registrarte en Isitech.</h2>
+        <p>Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
+        <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
+        <div style="width: 100%; height: 100%; display: flex; justify-content: flex-end;">
+          <img src="https://www.isitech.com.gt/_next/image?url=%2FimageHeader.avif&w=1200&q=75" alt="robot" style="width: 300px; height: 300px; margin-top: -50px; margin-bottom: -20px; margin-right: -20px;">
+        </div>
+      </div>
+      <div class="footer">
+        <img src="https://campus-isitech.vercel.app/isitech.png" alt="logo.png">
+        <p>Este es un correo automático. Si tienes alguna duda, no dudes en contactarnos.</p>
+      </div>
+    </div>
+  </body>
+</html>
     `;
     
 
