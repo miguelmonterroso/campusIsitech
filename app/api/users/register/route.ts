@@ -77,7 +77,7 @@ export async function POST(req: Request) {
         max-width: 600px;
         margin: 0 auto;
         background-color: #101541;
-        background-image: url('https://www.isitech.com.gt/bg.avif');
+        background-image: url('https://campus-isitech.vercel.app/bg.png');
         background-repeat: no-repeat;
         background-size: cover;
         color: white;
@@ -143,7 +143,7 @@ export async function POST(req: Request) {
         <td style="padding: 20px;">
           <h2>Gracias por registrarte en Isitech.</h2>
           <p>Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
-          <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
+          <p><a href="https://campus-isitech.vercel.app/" class="button" style="color: white;" >Comienza tu aventura aquí</a></p>
         </td>
       </tr>
       <tr>
