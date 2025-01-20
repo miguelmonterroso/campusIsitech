@@ -61,7 +61,69 @@ export async function POST(req: Request) {
 
     const subject = "¡Bienvenido a Isitech!";
     const text = `Hola ${name}, gracias por registrarte en Isitech.`;
-    const html = `<p>Hola <strong>${name}</strong>,</p><p>Gracias por registrarte en Isitech.</p>`;
+    const html = `
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f4f4f4;
+              margin: 0;
+              padding: 0;
+            }
+            .container {
+              width: 100%;
+              max-width: 600px;
+              margin: 0 auto;
+              background-color: #ffffff;
+              border-radius: 8px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .header {
+              background-color: #4CAF50;
+              padding: 20px;
+              color: #ffffff;
+              text-align: center;
+              border-radius: 8px 8px 0 0;
+            }
+            .content {
+              padding: 20px;
+              color: #333;
+            }
+            .button {
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #4CAF50;
+              color: #fff;
+              text-decoration: none;
+              border-radius: 5px;
+              font-weight: bold;
+            }
+            .footer {
+              background-color: #f1f1f1;
+              text-align: center;
+              padding: 10px;
+              font-size: 12px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Bienvenido a Isitech, ${name}!</h1>
+            </div>
+            <div class="content">
+              <p>Gracias por registrarte en Isitech. Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje.</p>
+              <p><a href="https://isitech.com" class="button">Comienza tu aventura aquí</a></p>
+            </div>
+            <div class="footer">
+              <p>Este es un correo automático. Si tienes alguna duda, no dudes en contactarnos.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+    
 
     try {
       await sendMail({
