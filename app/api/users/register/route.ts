@@ -65,10 +65,9 @@ export async function POST(req: Request) {
 <html>
   <head>
     <style>
-      /* Estilos generales */
       body {
         font-family: Arial, sans-serif;
-        background-color: #101541;
+        background-color: #f4f4f4; 
         margin: 0;
         padding: 0;
       }
@@ -76,38 +75,35 @@ export async function POST(req: Request) {
         width: 100%;
         max-width: 600px;
         margin: 0 auto;
-        background-color: #101541;
-        background-image: url('https://campus-isitech.vercel.app/bg.png');
-        background-repeat: no-repeat;
-        background-size: cover;
-        color: white;
+        background-color: #ffffff; 
+        color: #333333; 
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
       .header {
-        background: rgb(161,38,250);
-        background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);
+        background: rgb(255, 204, 0);
+        background: linear-gradient(90deg, #FC9741 55%, #FB504F 100%);
         padding: 20px;
-        color: #ffffff;
+        color: #333333; 
         text-align: center;
         border-radius: 8px 8px 0 0;
       }
       .button {
         display: inline-block;
         padding: 10px 20px;
-        background: rgb(161,38,250);
-        background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);
-        color: #ffff;
+        background: rgb(255, 204, 0);
+        background: linear-gradient(90deg, #FC9741 55%, #FB504F 100%);
+        color: #fff;
         text-decoration: none;
         border-radius: 5px;
         font-weight: bold;
       }
       .footer {
-        background-color: #093151 !important;
+        background-color: #e2e2e2;
         text-align: center;
         padding: 10px;
         font-size: 12px;
-        color: white;
+        color: #333333;
       }
       @media only screen and (max-width: 600px) {
         .container {
@@ -143,7 +139,7 @@ export async function POST(req: Request) {
         <td style="padding: 20px;">
           <h2>Gracias por registrarte en Isitech.</h2>
           <p>Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
-          <p><a href="https://campus-isitech.vercel.app/" class="button" style="color: white;" >Comienza tu aventura aquí</a></p>
+          <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
         </td>
       </tr>
       <tr>
@@ -155,6 +151,7 @@ export async function POST(req: Request) {
     </table>
   </body>
 </html>
+
     `;
     
 
