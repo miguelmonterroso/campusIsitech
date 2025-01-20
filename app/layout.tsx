@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "campus-isitech.vercel.app/images/og-image.jpg",
+        url: "campus-isitech.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Isitech Campus - Aprende a Programar con los Mejores Recursos",
