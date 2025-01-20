@@ -18,7 +18,7 @@ const registerSchema = z.object({
   password: z
     .string()
     .min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
       { message: "La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un carácter especial." }),
   role: z.enum(["STUDENT", "INSTRUCTOR"]).default("STUDENT"),
 });
@@ -123,6 +123,7 @@ export async function POST(req: Request) {
         }
         img {
           width: 100% !important;
+          max-width: 250px;
           height: auto !important;
         }
       }
@@ -151,9 +152,8 @@ export async function POST(req: Request) {
     </table>
   </body>
 </html>
-
     `;
-    
+
 
     try {
       await sendMail({
