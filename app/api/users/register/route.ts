@@ -75,12 +75,17 @@ export async function POST(req: Request) {
               width: 100%;
               max-width: 600px;
               margin: 0 auto;
-              background-color: #ffffff;
+              background-color: #101541;
+              background-image: url('https://www.isitech.com.gt/bg.avif');
+              background-repeat: no-repeat;
+              background-size: cover;
+              color: white;
               border-radius: 8px;
               box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
             .header {
-              background-color: #4CAF50;
+              background: rgb(161,38,250);
+              background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);              
               padding: 20px;
               color: #ffffff;
               text-align: center;
@@ -88,19 +93,19 @@ export async function POST(req: Request) {
             }
             .content {
               padding: 20px;
-              color: #333;
+              color: #ffff;
             }
             .button {
               display: inline-block;
               padding: 10px 20px;
-              background-color: #4CAF50;
-              color: #fff;
+              background: rgb(161,38,250);
+              background: linear-gradient(90deg, rgba(161,38,250,1) 35%, rgba(15,77,250,1) 100%);                color: #fff;
               text-decoration: none;
               border-radius: 5px;
               font-weight: bold;
             }
             .footer {
-              background-color: #f1f1f1;
+              background-color: #093151;
               text-align: center;
               padding: 10px;
               font-size: 12px;
@@ -113,10 +118,19 @@ export async function POST(req: Request) {
               <h1>Bienvenido a Isitech, ${name}!</h1>
             </div>
             <div class="content">
-              <p>Gracias por registrarte en Isitech. Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje.</p>
-              <p><a href="https://isitech.com" class="button">Comienza tu aventura aquí</a></p>
+                <h2>
+                    Gracias por registrarte en Isitech. 
+                </h2>
+                
+              <p> Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
+              <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
+              <div style="display: flex; justify-content: flex-end;">
+                <img src="https://www.isitech.com.gt/_next/image?url=%2FimageHeader.avif&w=1200&q=75" alt="robot" style="width: 300px; height: 300px; margin-top: -50px; margin-bottom: -20px; margin-right: -20px;">
+
+              </div>
             </div>
             <div class="footer">
+                <img src="https://campus-isitech.vercel.app/isitech.png" alt="logo.png">
               <p>Este es un correo automático. Si tienes alguna duda, no dudes en contactarnos.</p>
             </div>
           </div>
