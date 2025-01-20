@@ -76,9 +76,6 @@ export async function POST(req: Request) {
               max-width: 600px;
               margin: 0 auto;
               background-color: #101541;
-              background-image: url('https://www.isitech.com.gt/bg.avif');
-              background-repeat: no-repeat;
-              background-size: cover;
               color: white;
               border-radius: 8px;
               box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -120,10 +117,6 @@ export async function POST(req: Request) {
                 
               <p> Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
               <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
-              <div style="display: flex; justify-content: flex-end;">
-                <img src="https://www.isitech.com.gt/_next/image?url=%2FimageHeader.avif&w=1200&q=75" alt="robot" style="width: 300px; height: 300px; margin-top: -50px; margin-bottom: -20px; margin-right: -20px;">
-
-              </div>
             </div>
             <div class="footer">
                 <img src="https://campus-isitech.vercel.app/isitech.png" alt="logo.png">
