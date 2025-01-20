@@ -67,7 +67,7 @@ export async function POST(req: Request) {
           <style>
             body {
               font-family: Arial, sans-serif;
-              background-color: #f4f4f4;
+              background-color: #101541;
               margin: 0;
               padding: 0;
             }
@@ -91,10 +91,6 @@ export async function POST(req: Request) {
               text-align: center;
               border-radius: 8px 8px 0 0;
             }
-            .content {
-              padding: 20px;
-              color: #ffff;
-            }
             .button {
               display: inline-block;
               padding: 10px 20px;
@@ -113,11 +109,11 @@ export async function POST(req: Request) {
           </style>
         </head>
         <body>
-          <div class="container">
+          <div class="container" style="background-color: #101541;">
             <div class="header">
               <h1>Bienvenido a Isitech, ${name}!</h1>
             </div>
-            <div class="content">
+            <div style="padding: 20px;">
                 <h2>
                     Gracias por registrarte en Isitech. 
                 </h2>
