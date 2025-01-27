@@ -38,17 +38,28 @@ export async function GET(req: Request) {
 
     const userId = decoded.id;
 
+    const enrollments = await prisma.enrollment.findMany({
+      where: {
+        studentId: userId,
+      },
+      select: {
+        courseId: true, 
+      },
+    });
+
+    if (enrollments.length === 0) {
+      return NextResponse.json([], { status: 200 });
+    }
+
+    const courseIds = enrollments.map((enrollment) => enrollment.courseId);
+
     const courses = await prisma.course.findMany({
       where: {
-        students: {
-          some: {
-            id: userId,
-          },
-        },
+        id: { in: courseIds },
       },
       include: {
         lessons: true,
-        instructor: { 
+        instructor: {
           select: {
             id: true,
             name: true,
@@ -67,6 +78,7 @@ export async function GET(req: Request) {
     );
   }
 }
+
 
 export async function POST(req: Request) {
   try {
