@@ -97,5 +97,71 @@ export async function PATCH(req: Request) {
         { status: 500 }
       );
     }
-  }
-  
+}
+
+export async function GET(req: Request) {
+    try {
+      const authHeader = req.headers.get("Authorization");
+
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return NextResponse.json(
+          { error: "No autorizado. Se requiere un token." },
+          { status: 401 }
+        );
+      }
+
+      const token = authHeader.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+
+      if (!decoded || typeof decoded !== "object") {
+        return NextResponse.json(
+          { error: "Token inválido." },
+          { status: 401 }
+        );
+      }
+
+      const { id: userId, role } = decoded as { id: number; role: string };
+
+      if (role !== "STUDENT") {
+        return NextResponse.json(
+          { error: "Acceso denegado. Solo los estudiantes pueden ver sus facturas." },
+          { status: 403 }
+        );
+      }
+
+      const billings = await prisma.billing.findMany({
+        where: { userId },
+        select: {
+          id: true,
+          courseId: true,
+          amount: true,
+          dueDate: true,
+          status: true,
+          createdAt: true,
+        },
+      });
+
+      return NextResponse.json(billings, { status: 200 });
+    } catch (error: unknown) {
+      console.error("Error en el endpoint de facturación:", error);
+
+      if (error instanceof jwt.JsonWebTokenError) {
+        return NextResponse.json(
+          { error: "Token inválido o expirado." },
+          { status: 401 }
+        );
+      }
+
+      if (error instanceof Error) {
+        return NextResponse.json(
+          { error: error.message },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json(
+        { error: "Ocurrió un error desconocido." },
+        { status: 500 }
+      );
+    }
+}

@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import Link from "next/link";
 
 const items = [
   {
@@ -63,7 +64,6 @@ const items = [
 
 export function AppSidebar() {
   const { isAuthenticated, user, logout } = useAuthStore();
-  console.log(isAuthenticated, user)
 
   const handleLogOut = () => {
     logout()
@@ -134,7 +134,9 @@ export function AppSidebar() {
                       <span>Cuenta</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <span>Facturación</span>
+                      <Link href="/billing">
+                        <span>Facturación</span>
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogOut}>
                       <span>Cerrar sesión</span>
