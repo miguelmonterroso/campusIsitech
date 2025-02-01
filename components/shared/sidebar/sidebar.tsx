@@ -133,11 +133,11 @@ export function AppSidebar() {
                     <DropdownMenuItem>
                       <span>Cuenta</span>
                     </DropdownMenuItem>
+                    <Link href="/billing">
                     <DropdownMenuItem>
-                      <Link href="/billing">
                         <span>Facturación</span>
-                      </Link>
                     </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem onClick={handleLogOut}>
                       <span>Cerrar sesión</span>
                     </DropdownMenuItem>
