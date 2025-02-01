@@ -80,7 +80,7 @@ const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice }) => {
     <div className="flex flex-col items-center">
       <div
         ref={invoiceRef}
-        className="w-[800px] bg-black p-8 shadow-md text-white rounded-lg border border-gray-600"
+        className="w-full bg-black p-8 shadow-md text-white rounded-lg border border-gray-600"
       >
         <Image src="/isitech.png" width={100} height={100} alt="logo" />
         <h1 className="text-2xl font-bold mb-4 mt-4 font-mono">
