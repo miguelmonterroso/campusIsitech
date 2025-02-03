@@ -31,7 +31,7 @@ export default function DashboardComponent() {
       name: "Actualiza tu perfil",
       description: "Manten actualizado tu perfil",
       cta: "Ver Perfil",
-      href: "/account",
+      href: "/settings",
       className: "col-span-3 lg:col-span-1",
       background: (
           <div>

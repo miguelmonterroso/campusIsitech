@@ -3,7 +3,6 @@
 import {
   ChevronUp,
   Home,
-  Settings,
   User2,
   Book,
   Clipboard,
@@ -54,11 +53,6 @@ const items = [
     url: "/calendar",
     icon: Calendar1,
   },
-  {
-    title: "Configuración",
-    url: "/settings",
-    icon: Settings,
-  },
 
 ];
 
@@ -99,12 +93,12 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a
+                    <Link
                       href={item.url}
                     >
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -130,9 +124,11 @@ export function AppSidebar() {
                     side="top"
                     className="w-[--radix-popper-anchor-width]"
                   >
-                    <DropdownMenuItem>
-                      <span>Cuenta</span>
-                    </DropdownMenuItem>
+                    <Link href="/settings">
+                      <DropdownMenuItem>
+                        <span>Cuenta</span>
+                      </DropdownMenuItem>
+                    </Link>
                     <Link href="/billing">
                     <DropdownMenuItem>
                         <span>Facturación</span>
