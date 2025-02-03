@@ -138,9 +138,11 @@ export function AppSidebar() {
                         <span>Facturación</span>
                     </DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem onClick={handleLogOut}>
-                      <span>Cerrar sesión</span>
-                    </DropdownMenuItem>
+                    <Link href="/">
+                      <DropdownMenuItem onClick={handleLogOut}>
+                        <span>Cerrar sesión</span>
+                      </DropdownMenuItem>
+                    </Link>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>

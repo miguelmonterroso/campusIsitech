@@ -172,7 +172,7 @@ export default function CardForm() {
           control={form.control}
           name="cvv"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex items-center flex-col">
               <FormLabel className="text-white font-semibold">CVV</FormLabel>
               <FormControl>
                 <InputOTP maxLength={6} {...field}>
