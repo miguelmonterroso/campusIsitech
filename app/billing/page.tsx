@@ -21,6 +21,7 @@ import {
 import InvoicePDF from "@/components/billing/generateInvoice";
 import PaymentModal from "@/components/billing/paymentModal";
 import BlurFade from "@/components/ui/blur-fade";
+
 interface Invoice {
   id: number;
   courseId: number;
@@ -72,83 +73,86 @@ export default function Billing() {
     );
   }
 
+  const pendingInvoices = invoices.filter((invoice) => invoice.status !== "PAID");
+  const paidInvoices = invoices.filter((invoice) => invoice.status === "PAID");
+
   return (
     <BlurFade inView delay={0.5}>
       <div className="p-6 space-y-4">
         <h2 className="text-2xl font-bold mb-4">Mis Facturas</h2>
         {invoices.length === 0 ? (
-          <p className="text-lg text-gray-500">
-            No tienes facturas disponibles.
-          </p>
+          <p className="text-lg text-gray-500">No tienes facturas disponibles.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {invoices.map((invoice) => (
-              <Card key={invoice.id} className="border rounded-lg shadow-lg">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg font-semibold">
-                      Factura ISI-{invoice.id}
-                    </CardTitle>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger
-                          onClick={() => setSelectedInvoice(invoice)}
-                        >
-                          {invoice.status != "PAID" ? (
-                            ""
-                          ) : (
-                            <Eye className="cursor-pointer" />
-                          )}
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Ver factura</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <CardDescription className="text-sm text-gray-500">
-                    Curso ID: {invoice.courseId}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm">
-                    Monto:{" "}
-                    <span className="font-semibold">
-                      ${invoice.amount.toFixed(2)}
-                    </span>
-                  </p>
-                  <p className="text-sm">
-                    Fecha de vencimiento:{" "}
-                    {new Date(invoice.dueDate).toLocaleDateString()}
-                  </p>
-                  <div className="flex justify-between items-center flex-wrap">
-                    <Badge
-                      variant={
-                        invoice.status === "PAID" ? "default" : "destructive"
-                      }
-                      className="mt-5"
-                    >
-                      {invoice.status === "PAID" ? "PAGADO" : "PENDIENTE"}
-                    </Badge>
-                    {invoice.status != "PAID" ? <PaymentModal /> : ""}
-                  </div>
-                </CardContent>
-                <CardFooter className="text-sm text-gray-500">
-                  Creado el: {new Date(invoice.createdAt).toLocaleDateString()}
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+          <>
+            {pendingInvoices.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold mb-3 text-isiRed">Facturas Pendientes</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {pendingInvoices.map((invoice) => (
+                    <Card key={invoice.id} className="border rounded-lg shadow-lg">
+                      <CardHeader>
+                        <CardTitle className="text-lg font-semibold">
+                          Factura ISI-{invoice.id}
+                        </CardTitle>
+                        <CardDescription>Curso: {invoice.id}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm">Monto: <span className="font-semibold">${invoice.amount.toFixed(2)}</span></p>
+                        <p className="text-sm">Fecha de vencimiento: {new Date(invoice.dueDate).toLocaleDateString()}</p>
+                        <div className="flex justify-between items-center flex-wrap">
+                          <Badge variant="destructive" className="mt-5">PENDIENTE</Badge>
+                          <PaymentModal />
+                        </div>
+                      </CardContent>
+                      <CardFooter className="text-sm text-gray-500">Creado el: {new Date(invoice.createdAt).toLocaleDateString()}</CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {paidInvoices.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold mb-3 text-white">Facturas Pagadas</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {paidInvoices.map((invoice) => (
+                    <Card key={invoice.id} className="border rounded-lg shadow-lg">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-lg font-semibold">
+                            Factura ISI-{invoice.id}
+                          </CardTitle>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger onClick={() => setSelectedInvoice(invoice)}>
+                                <Eye className="cursor-pointer" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Ver factura</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm">Monto: <span className="font-semibold">${invoice.amount.toFixed(2)}</span></p>
+                        <p className="text-sm">Fecha de vencimiento: {new Date(invoice.dueDate).toLocaleDateString()}</p>
+                        <Badge variant="default" className="mt-5">PAGADO</Badge>
+                      </CardContent>
+                      <CardFooter className="text-sm text-gray-500">Creado el: {new Date(invoice.createdAt).toLocaleDateString()}</CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {selectedInvoice && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 h-[98vh]">
             <BlurFade inView delay={0.3}>
               <div className="p-4 rounded-lg relative flex flex-col items-end">
-                <CircleX
-                  className="text-white absolute mr-4 mt-4 z-50"
-                  onClick={() => setSelectedInvoice(null)}
-                />
+                <CircleX className="text-white absolute mr-4 mt-4 z-50" onClick={() => setSelectedInvoice(null)} />
                 <InvoicePDF invoice={selectedInvoice} />
               </div>
             </BlurFade>

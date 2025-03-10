@@ -16,7 +16,7 @@ export default function PaymentModal() {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className="bg-isiBlue text-white font-semibold hover:bg-black mt-3">
+        <Button className="bg-isiBlue text-white font-semibold hover:bg-blue-600 mt-3">
           Pagar factura <Banknote />
         </Button>
       </DialogTrigger>

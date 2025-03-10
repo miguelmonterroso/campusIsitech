@@ -14,6 +14,9 @@ const config: Config = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
 			isiBlue: '#0F4DFA',
+			isiRed: '#FB504F',
+			isiOrange: '#FC9741',
+			isiPurple: '#A126FA',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
