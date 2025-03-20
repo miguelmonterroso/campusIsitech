@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(STUDENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  role       Role      @default(STUDENT)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
-  courses     Enrollment[] 
-  teaching    Course[]     @relation("InstructorCourses") 
-  billingInfo Billing[] 
+  courses     Enrollment[]
+  teaching    Course[]     @relation("InstructorCourses")
+  billingInfo Billing[]
 }
 
 enum Role {
@@ -32,41 +32,42 @@ model Course {
   description    String
   image          String
   price          Float
-  durationMonths Int 
+  durationMonths Int
   startDate      DateTime
-  endDate        DateTime 
+  endDate        DateTime
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   instructor   User         @relation("InstructorCourses", fields: [instructorId], references: [id])
-  instructorId Int 
-  students     Enrollment[] 
-  lessons      Lesson[] 
-  billings     Billing[] 
+  instructorId Int
+  students     Enrollment[]
+  lessons      Lesson[]
+  billings     Billing[]
 }
 
 model Lesson {
   id          Int      @id @default(autoincrement())
   title       String
   description String
-  videoUrl    String 
-  course      Course   @relation(fields: [courseId], references: [id]) 
-  courseId    Int 
+  videoUrl    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  courseId    Int
   createdAt   DateTime @default(now())
 }
 
 model Billing {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id]) 
-  userId    Int 
-  course    Course   @relation(fields: [courseId], references: [id]) 
-  courseId  Int 
-  amount    Float 
-  dueDate   DateTime 
-  status    Status   @default(PENDING) 
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int
+  course       Course   @relation(fields: [courseId], references: [id])
+  courseId     Int
+  amount       Float
+  dueDate      DateTime
+  status       Status   @default(PENDING)
+  createdAt    DateTime @default(now())
 
-  enrollments Enrollment[] 
+  // Relación de vuelta a Enrollment (back relation uno a uno)
+  enrollment Enrollment?
 }
 
 enum Status {
@@ -76,18 +77,18 @@ enum Status {
 }
 
 model Enrollment {
-  id        Int      @id @default(autoincrement())
-  student   User     @relation(fields: [studentId], references: [id]) 
-  studentId Int 
-  course    Course   @relation(fields: [courseId], references: [id]) 
-  courseId  Int 
-  billing   Billing? @relation(fields: [billingId], references: [id]) 
-  billingId Int? 
+  id         Int      @id @default(autoincrement())
+  student    User     @relation(fields: [studentId], references: [id])
+  studentId  Int
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   Int
+  // Relación uno a uno: cada Enrollment tiene una Billing única
+  billing    Billing  @relation(fields: [billingId], references: [id])
+  billingId  Int      @unique
+  status     EnrollmentStatus @default(PENDING)
+  createdAt  DateTime         @default(now())
 
-  status    EnrollmentStatus @default(PENDING)
-  createdAt DateTime         @default(now()) 
-
-  @@unique([studentId, courseId]) 
+  @@unique([studentId, courseId])
 }
 
 enum EnrollmentStatus {

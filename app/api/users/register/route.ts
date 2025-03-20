@@ -1,3 +1,4 @@
+// pages/api/register.ts (o la ruta que estés usando en tu proyecto)
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { hash } from "bcryptjs";
@@ -12,15 +13,16 @@ const registerSchema = z.object({
       (name) => !/[^a-zA-Z\s]/.test(name),
       { message: "El nombre solo puede contener letras y espacios." }
     ),
-  email: z
-    .string()
-    .email({ message: "El email no tiene un formato válido." }),
+  email: z.string().email({ message: "El email no tiene un formato válido." }),
   password: z
     .string()
     .min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      { message: "La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un carácter especial." }),
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      { message: "La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un carácter especial." }
+    ),
   role: z.enum(["STUDENT", "INSTRUCTOR"]).default("STUDENT"),
+  courseId: z.number({ required_error: "El courseId es requerido." }),
 });
 
 export async function POST(req: Request) {
@@ -35,12 +37,12 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password, role } = parsedData.data;
+    const { name, email, password, role, courseId } = parsedData.data;
 
+    // Verificar si el usuario ya existe
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
-
     if (existingUser) {
       return NextResponse.json(
         { error: "El email ya está registrado." },
@@ -48,8 +50,10 @@ export async function POST(req: Request) {
       );
     }
 
+    // Hashear la contraseña
     const hashedPassword = await hash(password, 10);
 
+    // Crear el usuario
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -59,6 +63,37 @@ export async function POST(req: Request) {
       },
     });
 
+    // Buscar el curso seleccionado
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
+    });
+    if (!course) {
+      return NextResponse.json(
+        { error: "Curso no encontrado." },
+        { status: 404 }
+      );
+    }
+
+    // Crear la factura (Billing) para el curso seleccionado
+    const billing = await prisma.billing.create({
+      data: {
+        user: { connect: { id: newUser.id } },
+        course: { connect: { id: course.id } },
+        amount: course.price,
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 7)), // Vencimiento a 7 días
+      },
+    });
+
+    // Crear la inscripción (Enrollment) asociada a la factura
+    const enrollment = await prisma.enrollment.create({
+      data: {
+        student: { connect: { id: newUser.id } },
+        course: { connect: { id: course.id } },
+        billing: { connect: { id: billing.id } },
+      },
+    });
+
+    // Enviar correo de bienvenida
     const subject = "¡Bienvenido a Isitech!";
     const text = `Hola ${name}, gracias por registrarte en Isitech.`;
     const html = `
@@ -81,17 +116,14 @@ export async function POST(req: Request) {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
       .header {
-        background: rgb(255, 204, 0);
         background: linear-gradient(90deg, #FC9741 55%, #FB504F 100%);
         padding: 20px;
-        color: #333333; 
         text-align: center;
         border-radius: 8px 8px 0 0;
       }
       .button {
         display: inline-block;
         padding: 10px 20px;
-        background: rgb(255, 204, 0);
         background: linear-gradient(90deg, #FC9741 55%, #FB504F 100%);
         color: #fff;
         text-decoration: none;
@@ -103,7 +135,6 @@ export async function POST(req: Request) {
         text-align: center;
         padding: 10px;
         font-size: 12px;
-        color: #333333;
       }
       @media only screen and (max-width: 600px) {
         .container {
@@ -154,7 +185,6 @@ export async function POST(req: Request) {
 </html>
     `;
 
-
     try {
       await sendMail({
         to: email,
@@ -169,7 +199,14 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         message: "Usuario registrado con éxito.",
-        user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role },
+        user: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newUser.role,
+        },
+        enrollment,
+        billing,
       },
       { status: 201 }
     );
