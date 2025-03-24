@@ -35,6 +35,10 @@ model Course {
   durationMonths Int
   startDate      DateTime
   endDate        DateTime
+  cupo           Int?     // Capacidad máxima del curso, por ejemplo 40 alumnos
+  dias           String?  // Días de la semana en que se imparte el curso, ej: "Lunes, Miércoles, Viernes"
+  horaInicio     String?  // Hora de inicio, ej: "18:00"
+  zoomLink       String?  // Link para conectarse a la clase por Zoom
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -44,6 +48,8 @@ model Course {
   lessons      Lesson[]
   billings     Billing[]
 }
+
+
 
 model Lesson {
   id          Int      @id @default(autoincrement())

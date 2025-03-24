@@ -3,6 +3,14 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
+// Interfaz para el payload del token JWT
+interface JwtPayload {
+  id: number;
+  role: string;
+  iat?: number;
+  exp?: number;
+}
+
 const createCourseSchema = z.object({
   name: z.string().min(3, "El nombre debe tener al menos 3 caracteres."),
   description: z.string().min(10, "La descripción debe tener al menos 10 caracteres."),
@@ -12,12 +20,15 @@ const createCourseSchema = z.object({
   startDate: z.string().datetime({ offset: true }),
   endDate: z.string().datetime({ offset: true }),
   instructorId: z.number().int().positive("El instructor ID debe ser un número válido."),
+  cupo: z.number().int().positive("El cupo debe ser mayor a 0.").optional(),
+  dias: z.string().optional(),
+  horaInicio: z.string().optional(),
+  zoomLink: z.string().url("El zoomLink debe ser una URL válida.").optional(),
 });
 
 export async function GET(req: Request) {
   try {
     const authHeader = req.headers.get("Authorization");
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
         { error: "No autorizado. Se requiere un token." },
@@ -26,10 +37,9 @@ export async function GET(req: Request) {
     }
 
     const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-
-    if (!decoded || typeof decoded !== "object") {
+    if (!decoded) {
       return NextResponse.json(
         { error: "Token inválido." },
         { status: 401 }
@@ -39,12 +49,8 @@ export async function GET(req: Request) {
     const userId = decoded.id;
 
     const enrollments = await prisma.enrollment.findMany({
-      where: {
-        studentId: userId,
-      },
-      select: {
-        courseId: true, 
-      },
+      where: { studentId: userId },
+      select: { courseId: true },
     });
 
     if (enrollments.length === 0) {
@@ -52,11 +58,8 @@ export async function GET(req: Request) {
     }
 
     const courseIds = enrollments.map((enrollment) => enrollment.courseId);
-
     const courses = await prisma.course.findMany({
-      where: {
-        id: { in: courseIds },
-      },
+      where: { id: { in: courseIds } },
       include: {
         lessons: true,
         instructor: {
@@ -79,7 +82,6 @@ export async function GET(req: Request) {
   }
 }
 
-
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get("Authorization");
@@ -91,17 +93,15 @@ export async function POST(req: Request) {
     }
 
     const token = authHeader.split(" ")[1];
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-
-    if (!decoded || typeof decoded !== "object") {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    if (!decoded) {
       return NextResponse.json(
         { error: "Token inválido." },
         { status: 401 }
       );
     }
 
-    const { role } = decoded as { role: string };
+    const { role } = decoded;
     if (role !== "INSTRUCTOR") {
       return NextResponse.json(
         { error: "Acceso denegado. Solo los instructores pueden crear cursos." },
@@ -129,6 +129,10 @@ export async function POST(req: Request) {
         startDate: new Date(data.startDate),
         endDate: new Date(data.endDate),
         instructorId: data.instructorId,
+        cupo: data.cupo,
+        dias: data.dias,
+        horaInicio: data.horaInicio,
+        zoomLink: data.zoomLink,
       },
     });
 
@@ -142,14 +146,12 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-
     if (error instanceof Error) {
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
       );
     }
-
     return NextResponse.json(
       { error: "Ocurrió un error desconocido." },
       { status: 500 }

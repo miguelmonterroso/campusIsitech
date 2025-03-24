@@ -1,4 +1,3 @@
-// pages/api/register.ts (o la ruta que estés usando en tu proyecto)
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { hash } from "bcryptjs";
@@ -39,7 +38,6 @@ export async function POST(req: Request) {
 
     const { name, email, password, role, courseId } = parsedData.data;
 
-    // Verificar si el usuario ya existe
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -50,10 +48,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Hashear la contraseña
     const hashedPassword = await hash(password, 10);
 
-    // Crear el usuario
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -63,7 +59,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // Buscar el curso seleccionado
     const course = await prisma.course.findUnique({
       where: { id: courseId },
     });
@@ -74,7 +69,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Crear la factura (Billing) para el curso seleccionado
     const billing = await prisma.billing.create({
       data: {
         user: { connect: { id: newUser.id } },
@@ -84,7 +78,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // Crear la inscripción (Enrollment) asociada a la factura
     const enrollment = await prisma.enrollment.create({
       data: {
         student: { connect: { id: newUser.id } },
@@ -93,7 +86,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // Enviar correo de bienvenida
     const subject = "¡Bienvenido a Isitech!";
     const text = `Hola ${name}, gracias por registrarte en Isitech.`;
     const html = `
