@@ -3,8 +3,9 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
+// Actualizamos el esquema para recibir courseScheduleId en lugar de courseId.
 const enrollmentSchema = z.object({
-  courseId: z.number().int().positive("El ID del curso debe ser un número válido."),
+  courseScheduleId: z.number().int().positive("El ID del horario del curso debe ser un número válido."),
 });
 
 export async function POST(req: Request) {
@@ -20,10 +21,7 @@ export async function POST(req: Request) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
     if (!decoded || typeof decoded !== "object") {
-      return NextResponse.json(
-        { error: "Token inválido." },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Token inválido." }, { status: 401 });
     }
     const { id: userId, role } = decoded as { id: number; role: string };
 
@@ -34,55 +32,54 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validación del body de la solicitud
+    // Validación del body de la solicitud usando el nuevo esquema
     const payload = await req.json();
-    const { courseId } = enrollmentSchema.parse(payload);
+    const { courseScheduleId } = enrollmentSchema.parse(payload);
 
-    // Buscar el curso
-    const course = await prisma.course.findUnique({
-      where: { id: courseId },
+    // Buscar el horario del curso (CourseSchedule) y, de paso, incluir el curso para obtener el precio
+    const schedule = await prisma.courseSchedule.findUnique({
+      where: { id: courseScheduleId },
+      include: { course: true },
     });
 
-    if (!course) {
+    if (!schedule) {
       return NextResponse.json(
-        { error: "El curso no existe." },
+        { error: "El horario del curso no existe." },
         { status: 404 }
       );
     }
 
-    // Se elimina la validación de cupo ya que el campo 'cupo' fue removido del modelo Course.
-
-    // Verificar que el estudiante no esté ya inscrito en el curso
+    // Verificar que el estudiante no esté ya inscrito en este horario de curso
     const alreadyEnrolled = await prisma.enrollment.findFirst({
       where: {
         studentId: userId,
-        courseId,
+        courseScheduleId: courseScheduleId,
       },
     });
 
     if (alreadyEnrolled) {
       return NextResponse.json(
-        { error: "Ya estás inscrito en este curso." },
+        { error: "Ya estás inscrito en este horario de curso." },
         { status: 400 }
       );
     }
 
-    // Crear la factura (Billing) para el curso
+    // Crear la factura (Billing) usando el precio del curso asociado al horario
     const billing = await prisma.billing.create({
       data: {
         userId,
-        courseId,
-        amount: course.price,
+        courseId: schedule.course.id,
+        amount: schedule.course.price,
         dueDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
         status: "PENDING",
       },
     });
 
-    // Crear la inscripción (Enrollment)
+    // Crear la inscripción (Enrollment) asociada al horario
     const enrollment = await prisma.enrollment.create({
       data: {
         studentId: userId,
-        courseId,
+        courseScheduleId: schedule.id,
         billingId: billing.id,
       },
     });
@@ -101,10 +98,7 @@ export async function POST(req: Request) {
       );
     }
     if (error instanceof Error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
     return NextResponse.json(
       { error: "Ocurrió un error desconocido." },

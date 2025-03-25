@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  name       String
-  email      String    @unique
-  password   String
-  role       Role      @default(STUDENT)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id              Int               @id @default(autoincrement())
+  name            String
+  email           String            @unique
+  password        String
+  role            Role              @default(STUDENT)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 
-  courses     Enrollment[]
-  teaching    Course[]     @relation("InstructorCourses")
-  billingInfo Billing[]
+  courses         Enrollment[]
+  teaching        Course[]          @relation("InstructorCourses")
+  billingInfo     Billing[]
+  courseSchedules CourseSchedule[]  @relation("CourseScheduleInstructor")
 }
 
 enum Role {
@@ -27,24 +28,37 @@ enum Role {
 }
 
 model Course {
-  id             Int      @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   name           String
   description    String
   image          String
   price          Float
   durationMonths Int
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
   instructor   User         @relation("InstructorCourses", fields: [instructorId], references: [id])
   instructorId Int
-  students     Enrollment[]
   lessons      Lesson[]
   billings     Billing[]
+  schedules    CourseSchedule[]
 }
 
+model CourseSchedule {
+  id           Int       @id @default(autoincrement())
+  course       Course    @relation(fields: [courseId], references: [id])
+  courseId     Int
+  instructor   User?     @relation("CourseScheduleInstructor", fields: [instructorId], references: [id])
+  instructorId Int?      // Opcional: si se asigna un instructor distinto al del curso general
+  dayPattern   String    // Ejemplo: "Lunes y Miércoles"
+  startDate    DateTime  // Fecha de inicio para esta cohorte
+  cupo         Int       // Capacidad máxima para este horario
+  zoomLink     String?   // Link para la sesión, opcional
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
-
+  enrollments  Enrollment[]
+}
 
 model Lesson {
   id          Int      @id @default(autoincrement())
@@ -67,8 +81,7 @@ model Billing {
   status       Status   @default(PENDING)
   createdAt    DateTime @default(now())
 
-  // Relación de vuelta a Enrollment (back relation uno a uno)
-  enrollment Enrollment?
+  enrollment   Enrollment?
 }
 
 enum Status {
@@ -78,18 +91,17 @@ enum Status {
 }
 
 model Enrollment {
-  id         Int      @id @default(autoincrement())
-  student    User     @relation(fields: [studentId], references: [id])
-  studentId  Int
-  course     Course   @relation(fields: [courseId], references: [id])
-  courseId   Int
-  // Relación uno a uno: cada Enrollment tiene una Billing única
-  billing    Billing  @relation(fields: [billingId], references: [id])
-  billingId  Int      @unique
-  status     EnrollmentStatus @default(PENDING)
-  createdAt  DateTime         @default(now())
+  id                Int              @id @default(autoincrement())
+  student           User             @relation(fields: [studentId], references: [id])
+  studentId         Int
+  courseSchedule    CourseSchedule   @relation(fields: [courseScheduleId], references: [id])
+  courseScheduleId  Int
+  billing           Billing          @relation(fields: [billingId], references: [id])
+  billingId         Int              @unique
+  status            EnrollmentStatus @default(PENDING)
+  createdAt         DateTime         @default(now())
 
-  @@unique([studentId, courseId])
+  @@unique([studentId, courseScheduleId])
 }
 
 enum EnrollmentStatus {

@@ -29,43 +29,42 @@ export async function GET(req: Request) {
         { status: 401 }
       );
     }
-
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-
     if (!decoded) {
       return NextResponse.json(
         { error: "Token inválido." },
         { status: 401 }
       );
     }
-
     const userId = decoded.id;
-
+    // Obtenemos las inscripciones del usuario y, a través de ellas, el curso vinculado mediante courseSchedule
     const enrollments = await prisma.enrollment.findMany({
       where: { studentId: userId },
-      select: { courseId: true },
-    });
-
-    if (enrollments.length === 0) {
-      return NextResponse.json([], { status: 200 });
-    }
-
-    const courseIds = enrollments.map((enrollment) => enrollment.courseId);
-    const courses = await prisma.course.findMany({
-      where: { id: { in: courseIds } },
-      include: {
-        lessons: true,
-        instructor: {
+      select: {
+        courseSchedule: {
           select: {
-            id: true,
-            name: true,
-            email: true,
+            course: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                image: true,
+                price: true,
+                durationMonths: true,
+              },
+            },
           },
         },
       },
     });
-
+    if (enrollments.length === 0) {
+      return NextResponse.json([], { status: 200 });
+    }
+    // Extraemos los cursos de la relación courseSchedule
+    const courses = enrollments.map(
+      (enrollment) => enrollment.courseSchedule.course
+    );
     return NextResponse.json(courses, { status: 200 });
   } catch (error) {
     console.error("Error en el endpoint de cursos:", error);
@@ -85,7 +84,6 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     if (!decoded) {
@@ -94,7 +92,6 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-
     const { role } = decoded;
     if (role !== "INSTRUCTOR") {
       return NextResponse.json(
@@ -102,10 +99,8 @@ export async function POST(req: Request) {
         { status: 403 }
       );
     }
-
     const payload = await req.json();
     const data = createCourseSchema.parse(payload);
-
     const course = await prisma.course.create({
       data: {
         name: data.name,
@@ -116,11 +111,9 @@ export async function POST(req: Request) {
         instructorId: data.instructorId,
       },
     });
-
     return NextResponse.json({ message: "Curso creado exitosamente.", course });
   } catch (error: unknown) {
     console.error("Error en el endpoint POST:", error);
-
     if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json(
         { error: "Token inválido o expirado." },
@@ -128,10 +121,7 @@ export async function POST(req: Request) {
       );
     }
     if (error instanceof Error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
     return NextResponse.json(
       { error: "Ocurrió un error desconocido." },

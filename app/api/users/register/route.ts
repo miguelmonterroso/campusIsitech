@@ -4,6 +4,7 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 import { sendMail } from "@/lib/mailer";
 
+// Actualizamos el esquema para usar courseScheduleId en lugar de courseId.
 const registerSchema = z.object({
   name: z
     .string()
@@ -21,7 +22,7 @@ const registerSchema = z.object({
       { message: "La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un carácter especial." }
     ),
   role: z.enum(["STUDENT", "INSTRUCTOR"]).default("STUDENT"),
-  courseId: z.number({ required_error: "El courseId es requerido." }),
+  courseScheduleId: z.number({ required_error: "El courseScheduleId es requerido." }),
 });
 
 export async function POST(req: Request) {
@@ -36,8 +37,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password, role, courseId } = parsedData.data;
+    const { name, email, password, role, courseScheduleId } = parsedData.data;
 
+    // Verificar si el usuario ya existe
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -59,29 +61,33 @@ export async function POST(req: Request) {
       },
     });
 
-    const course = await prisma.course.findUnique({
-      where: { id: courseId },
+    // Buscar el horario del curso (CourseSchedule) y, de paso, incluir el curso para obtener el precio
+    const schedule = await prisma.courseSchedule.findUnique({
+      where: { id: courseScheduleId },
+      include: { course: true },
     });
-    if (!course) {
+    if (!schedule) {
       return NextResponse.json(
-        { error: "Curso no encontrado." },
+        { error: "Horario del curso no encontrado." },
         { status: 404 }
       );
     }
 
+    // Crear la factura (Billing) usando el precio del curso relacionado al horario
     const billing = await prisma.billing.create({
       data: {
         user: { connect: { id: newUser.id } },
-        course: { connect: { id: course.id } },
-        amount: course.price,
+        course: { connect: { id: schedule.course.id } },
+        amount: schedule.course.price,
         dueDate: new Date(new Date().setDate(new Date().getDate() + 7)), // Vencimiento a 7 días
       },
     });
 
+    // Crear la inscripción (Enrollment) conectando al estudiante con el CourseSchedule
     const enrollment = await prisma.enrollment.create({
       data: {
         student: { connect: { id: newUser.id } },
-        course: { connect: { id: course.id } },
+        courseSchedule: { connect: { id: schedule.id } },
         billing: { connect: { id: billing.id } },
       },
     });
