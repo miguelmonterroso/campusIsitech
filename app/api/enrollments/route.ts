@@ -50,18 +50,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validar que el curso no haya alcanzado su cupo máximo (si se definió)
-    if (course.cupo) {
-      const currentEnrollmentCount = await prisma.enrollment.count({
-        where: { courseId },
-      });
-      if (currentEnrollmentCount >= course.cupo) {
-        return NextResponse.json(
-          { error: "El curso ha alcanzado su cupo máximo de alumnos." },
-          { status: 400 }
-        );
-      }
-    }
+    // Se elimina la validación de cupo ya que el campo 'cupo' fue removido del modelo Course.
 
     // Verificar que el estudiante no esté ya inscrito en el curso
     const alreadyEnrolled = await prisma.enrollment.findFirst({
@@ -111,14 +100,12 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-
     if (error instanceof Error) {
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
       );
     }
-
     return NextResponse.json(
       { error: "Ocurrió un error desconocido." },
       { status: 500 }
