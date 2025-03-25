@@ -17,13 +17,7 @@ const createCourseSchema = z.object({
   price: z.number().positive("El precio debe ser mayor a 0."),
   image: z.string().url("La imagen debe ser una URL válida."),
   durationMonths: z.number().int().positive("La duración debe ser un número entero positivo."),
-  startDate: z.string().datetime({ offset: true }),
-  endDate: z.string().datetime({ offset: true }),
   instructorId: z.number().int().positive("El instructor ID debe ser un número válido."),
-  cupo: z.number().int().positive("El cupo debe ser mayor a 0.").optional(),
-  dias: z.string().optional(),
-  horaInicio: z.string().optional(),
-  zoomLink: z.string().url("El zoomLink debe ser una URL válida.").optional(),
 });
 
 export async function GET(req: Request) {
@@ -112,13 +106,6 @@ export async function POST(req: Request) {
     const payload = await req.json();
     const data = createCourseSchema.parse(payload);
 
-    if (new Date(data.startDate) >= new Date(data.endDate)) {
-      return NextResponse.json(
-        { error: "La fecha de inicio debe ser menor que la fecha de finalización." },
-        { status: 400 }
-      );
-    }
-
     const course = await prisma.course.create({
       data: {
         name: data.name,
@@ -126,13 +113,7 @@ export async function POST(req: Request) {
         price: data.price,
         image: data.image,
         durationMonths: data.durationMonths,
-        startDate: new Date(data.startDate),
-        endDate: new Date(data.endDate),
         instructorId: data.instructorId,
-        cupo: data.cupo,
-        dias: data.dias,
-        horaInicio: data.horaInicio,
-        zoomLink: data.zoomLink,
       },
     });
 
