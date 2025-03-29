@@ -3,14 +3,12 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
-// Actualizamos el esquema para recibir courseScheduleId en lugar de courseId.
 const enrollmentSchema = z.object({
   courseScheduleId: z.number().int().positive("El ID del horario del curso debe ser un número válido."),
 });
 
 export async function POST(req: Request) {
   try {
-    // Validación del token de autenticación
     const authHeader = req.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -32,11 +30,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validación del body de la solicitud usando el nuevo esquema
     const payload = await req.json();
     const { courseScheduleId } = enrollmentSchema.parse(payload);
 
-    // Buscar el horario del curso (CourseSchedule) y, de paso, incluir el curso para obtener el precio
     const schedule = await prisma.courseSchedule.findUnique({
       where: { id: courseScheduleId },
       include: { course: true },
@@ -49,7 +45,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verificar que el estudiante no esté ya inscrito en este horario de curso
     const alreadyEnrolled = await prisma.enrollment.findFirst({
       where: {
         studentId: userId,
@@ -64,7 +59,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Crear la factura (Billing) usando el precio del curso asociado al horario
     const billing = await prisma.billing.create({
       data: {
         userId,
@@ -75,7 +69,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // Crear la inscripción (Enrollment) asociada al horario
     const enrollment = await prisma.enrollment.create({
       data: {
         studentId: userId,

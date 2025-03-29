@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
-// Interfaz para el payload del token JWT
 interface JwtPayload {
   id: number;
   role: string;
@@ -38,7 +37,6 @@ export async function GET(req: Request) {
       );
     }
     const userId = decoded.id;
-    // Obtenemos las inscripciones del usuario y, a través de ellas, el curso vinculado mediante courseSchedule
     const enrollments = await prisma.enrollment.findMany({
       where: { studentId: userId },
       select: {
@@ -61,7 +59,6 @@ export async function GET(req: Request) {
     if (enrollments.length === 0) {
       return NextResponse.json([], { status: 200 });
     }
-    // Extraemos los cursos de la relación courseSchedule
     const courses = enrollments.map(
       (enrollment) => enrollment.courseSchedule.course
     );

@@ -4,7 +4,6 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 import { sendMail } from "@/lib/mailer";
 
-// Actualizamos el esquema para usar courseScheduleId en lugar de courseId.
 const registerSchema = z.object({
   name: z
     .string()
@@ -39,7 +38,6 @@ export async function POST(req: Request) {
 
     const { name, email, password, role, courseScheduleId } = parsedData.data;
 
-    // Verificar si el usuario ya existe
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -61,7 +59,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // Buscar el horario del curso (CourseSchedule) y, de paso, incluir el curso para obtener el precio
     const schedule = await prisma.courseSchedule.findUnique({
       where: { id: courseScheduleId },
       include: { course: true },
@@ -73,17 +70,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // Crear la factura (Billing) usando el precio del curso relacionado al horario
     const billing = await prisma.billing.create({
       data: {
         user: { connect: { id: newUser.id } },
         course: { connect: { id: schedule.course.id } },
         amount: schedule.course.price,
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 7)), // Vencimiento a 7 días
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
       },
     });
 
-    // Crear la inscripción (Enrollment) conectando al estudiante con el CourseSchedule
     const enrollment = await prisma.enrollment.create({
       data: {
         student: { connect: { id: newUser.id } },

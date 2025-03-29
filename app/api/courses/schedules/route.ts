@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
-// Interfaz para el payload del token JWT
 interface JwtPayload {
   id: number;
   role: string;
@@ -11,20 +10,17 @@ interface JwtPayload {
   exp?: number;
 }
 
-// Esquema para crear una opción de horario (CourseSchedule)
 const createCourseScheduleSchema = z.object({
   courseId: z.number().int().positive("El ID del curso es requerido"),
   instructorId: z.number().int().positive("El ID del instructor debe ser un número válido").optional(),
-  dayPattern: z.string().min(3, "El patrón de días es requerido"), // Ej: "Lunes y Miércoles"
+  dayPattern: z.string().min(3, "El patrón de días es requerido"),
   startDate: z.string().datetime({ offset: true }),
   cupo: z.number().int().positive("El cupo debe ser mayor a 0"),
   zoomLink: z.string().url("El Zoom link debe ser una URL válida").optional(),
 });
 
-// Método POST: Crear una nueva opción de horario para un curso
 export async function POST(req: Request) {
   try {
-    // Validación del token
     const authHeader = req.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -40,7 +36,6 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-    // Solo los instructores pueden crear opciones de horario
     if (decoded.role !== "INSTRUCTOR") {
       return NextResponse.json(
         { error: "Acceso denegado. Solo los instructores pueden crear opciones de horario." },
@@ -48,11 +43,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validar el body de la solicitud
     const payload = await req.json();
     const data = createCourseScheduleSchema.parse(payload);
 
-    // Crear la opción de horario
     const schedule = await prisma.courseSchedule.create({
       data: {
         course: { connect: { id: data.courseId } },
@@ -86,7 +79,6 @@ export async function POST(req: Request) {
   }
 }
 
-// Método GET: Listar todas las opciones de horario disponibles
 export async function GET() {
   try {
     const schedules = await prisma.courseSchedule.findMany({

@@ -49,11 +49,11 @@ model CourseSchedule {
   course       Course    @relation(fields: [courseId], references: [id])
   courseId     Int
   instructor   User?     @relation("CourseScheduleInstructor", fields: [instructorId], references: [id])
-  instructorId Int?      // Opcional: si se asigna un instructor distinto al del curso general
-  dayPattern   String    // Ejemplo: "Lunes y Miércoles"
-  startDate    DateTime  // Fecha de inicio para esta cohorte
-  cupo         Int       // Capacidad máxima para este horario
-  zoomLink     String?   // Link para la sesión, opcional
+  instructorId Int?
+  dayPattern   String    
+  startDate    DateTime  
+  cupo         Int       
+  zoomLink     String?   
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
