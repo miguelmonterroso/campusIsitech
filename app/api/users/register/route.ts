@@ -25,6 +25,17 @@ const registerSchema = z.object({
   isScholarship: z.boolean().optional()
 });
 
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "https://www.isitech.com.gt",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -33,7 +44,12 @@ export async function POST(req: Request) {
     if (!parsedData.success) {
       return NextResponse.json(
         { errors: parsedData.error.errors },
-        { status: 400 }
+        { 
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.isitech.com.gt",
+          }
+        }
       );
     }
 
@@ -45,7 +61,12 @@ export async function POST(req: Request) {
     if (existingUser) {
       return NextResponse.json(
         { error: "El email ya está registrado." },
-        { status: 409 }
+        { 
+          status: 409, 
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.isitech.com.gt",
+          }
+        }
       );
     }
 
@@ -68,7 +89,12 @@ export async function POST(req: Request) {
     if (!schedule) {
       return NextResponse.json(
         { error: "Horario del curso no encontrado." },
-        { status: 404 }
+        { 
+          status: 404, 
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.isitech.com.gt",
+          }
+         }
       );
     }
 
@@ -204,7 +230,12 @@ export async function POST(req: Request) {
         enrollment,
         billing,
       },
-      { status: 201 }
+      {
+        status: 201,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.isitech.com.gt",
+        }
+      }
     );
   } catch (error) {
     console.error("Error al registrar el usuario:", error);
