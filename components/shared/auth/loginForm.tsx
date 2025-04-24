@@ -26,6 +26,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import BlurFade from "@/components/ui/blur-fade";
+import Link from "next/link";
 
 const FormSchema = z.object({
   email: z.string().email("Ingresa un correo válido."),
@@ -135,6 +136,9 @@ export default function LoginForm() {
           )}
         />
         <Button type="submit">Iniciar Sesión</Button>
+        <Link href="https://www.isitech.com.gt/signup" target="blank">
+        <p className="text-gray-400 text-sm mt-5">¿Aun no tienes cuenta? <strong>¡Registrate!</strong></p>
+        </Link>
       </form>
     </Form>
     </BlurFade>

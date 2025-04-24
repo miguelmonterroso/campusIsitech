@@ -15,7 +15,7 @@ model User {
   role            Role              @default(STUDENT)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-
+  isScholarship   Boolean           @default(false)
   courses         Enrollment[]
   teaching        Course[]          @relation("InstructorCourses")
   billingInfo     Billing[]

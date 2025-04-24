@@ -22,6 +22,7 @@ const registerSchema = z.object({
     ),
   role: z.enum(["STUDENT", "INSTRUCTOR"]).default("STUDENT"),
   courseScheduleId: z.number({ required_error: "El courseScheduleId es requerido." }),
+  isScholarship: z.boolean().optional()
 });
 
 export async function POST(req: Request) {
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password, role, courseScheduleId } = parsedData.data;
+    const { name, email, password, role, courseScheduleId, isScholarship = false } = parsedData.data;
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -56,6 +57,7 @@ export async function POST(req: Request) {
         email,
         password: hashedPassword,
         role,
+        isScholarship
       },
     });
 
@@ -74,8 +76,9 @@ export async function POST(req: Request) {
       data: {
         user: { connect: { id: newUser.id } },
         course: { connect: { id: schedule.course.id } },
-        amount: schedule.course.price,
+        amount: isScholarship ? 0 : schedule.course.price,
         dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
+        status: isScholarship ? "PAID" : "PAID", // solo si agregaste ese estado
       },
     });
 

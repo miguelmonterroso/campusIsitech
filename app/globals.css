@@ -83,7 +83,6 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-
   .isitech-dark {
     --background: 240 10% 7%; /* Fondo oscuro casi negro, ligeramente púrpura */
     --foreground: 0 0% 95%; /* Blanco ligeramente gris para texto */
@@ -118,8 +117,10 @@ body {
     --sidebar-border: 240 10% 12%; /* Borde oscuro */
     --sidebar-ring: 275 80% 60%; /* Púrpura brillante */
   }
-  
-  
+  .theme {
+    --animate-grid: grid 15s linear infinite;
+  }
+
 }
 
 @layer base {
@@ -128,5 +129,16 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@theme inline {
+  @keyframes grid {
+  0% {
+    transform: translateY(-50%);
+    }
+  100% {
+    transform: translateY(0);
+    }
   }
 }

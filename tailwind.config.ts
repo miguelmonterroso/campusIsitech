@@ -17,6 +17,8 @@ const config: Config = {
 			isiRed: '#FB504F',
 			isiOrange: '#FC9741',
 			isiPurple: '#A126FA',
+			deepBlueIsi: '#101541',
+			darkBlueIsi: '#093151',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
