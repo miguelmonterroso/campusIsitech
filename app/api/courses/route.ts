@@ -42,6 +42,7 @@ export async function GET(req: Request) {
       select: {
         courseSchedule: {
           select: {
+            zoomLink: true,
             course: {
               select: {
                 id: true,
@@ -59,9 +60,14 @@ export async function GET(req: Request) {
     if (enrollments.length === 0) {
       return NextResponse.json([], { status: 200 });
     }
-    const courses = enrollments.map(
-      (enrollment) => enrollment.courseSchedule.course
-    );
+    const courses = enrollments.map((enrollment) => ({
+      id: enrollment.courseSchedule.course.id,
+      name: enrollment.courseSchedule.course.name,
+      description: enrollment.courseSchedule.course.description,
+      image: enrollment.courseSchedule.course.image,
+      progress: 0,
+      zoomLink: enrollment.courseSchedule.zoomLink ?? null,
+    }));
     return NextResponse.json(courses, { status: 200 });
   } catch (error) {
     console.error("Error en el endpoint de cursos:", error);

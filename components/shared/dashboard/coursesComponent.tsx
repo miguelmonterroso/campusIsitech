@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
-import { Progress } from "@/components/ui/progress";
+// import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import BlurFade from "@/components/ui/blur-fade";
@@ -14,6 +14,7 @@ interface Course {
   image: string;
   description: string;
   progress: number;
+  zoomLink: string | null;
 }
 
 export default function CoursesComponent() {
@@ -39,6 +40,7 @@ export default function CoursesComponent() {
 
         const data: Course[] = await response.json();
         setCourses(data);
+        console.log(data);
       } catch (error) {
         console.error("Error al obtener los cursos:", error);
       } finally {
@@ -52,9 +54,9 @@ export default function CoursesComponent() {
   if (loading) {
     return (
       <div className="flex items-center justify-center mt-20 flex-col h-screen">
-      <span className="loading loading-ring loading-lg"></span>
-      <p className="mt-4 text-lg text-gray-600">Cargando cursos...</p>
-    </div>
+        <span className="loading loading-ring loading-lg"></span>
+        <p className="mt-4 text-lg text-gray-600">Cargando cursos...</p>
+      </div>
     );
   }
 
@@ -81,13 +83,29 @@ export default function CoursesComponent() {
               className="flex flex-col p-4 space-y-4 cursor-pointer shadow-2xl grow"
               onClick={() => setSelectedCourse(course.id)}
             >
-              <Image src={course.image} alt={course.name} width={100} height={100} />
+              {course.zoomLink && (
+                <a
+                  href={course.zoomLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-blue-600 hover:underline"
+                >
+                  Ir al Zoom
+                </a>
+              )}
+
+              <Image
+                src={course.image}
+                alt={course.name}
+                width={100}
+                height={100}
+              />
               <h3 className="text-lg font-semibold">{course.name}</h3>
               <p className="text-sm text-gray-500">{course.description}</p>
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <Progress value={course.progress} />
                 <p className="text-sm mt-2">{`Progreso: ${course.progress}%`}</p>
-              </div>
+              </div> */}
             </Card>
           ))}
         </div>
