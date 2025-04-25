@@ -8,6 +8,7 @@ type CourseInformationProps = {
   name: string;
   image: string;
   description: string;
+  zoomLink?: string;
   onBack: () => void;
 };
 
@@ -15,9 +16,10 @@ export default function CourseInformation({
   name,
   image,
   description,
+  zoomLink,
   onBack,
 }: CourseInformationProps) {
-  const [selectedContent, setSelectedContent] = useState<string | null>(null);
+  const [selectedContent, setSelectedContent] = useState("videos");
 
 
 
@@ -59,6 +61,18 @@ export default function CourseInformation({
           <div className="flex-1">
             <h2 className="text-3xl font-bold">{name}</h2>
             <p className="mt-2 text-lg text-gray-700">{description}</p>
+            {zoomLink && (
+                <Button className="mt-2">
+                  <a
+                    href={zoomLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block hover:underline"
+                  >
+                    Ir a mi clase
+                  </a>
+                </Button>
+            )}
           </div>
           <div className="hidden md:block lg:block">
             <Image
@@ -78,7 +92,7 @@ export default function CourseInformation({
           >
             Ver Videos de Clases Anteriores
           </Button>
-          <Button
+          {/* <Button
             variant="outline"
             onClick={() => setSelectedContent("material")}
           >
@@ -89,7 +103,7 @@ export default function CourseInformation({
             onClick={() => setSelectedContent("exercises")}
           >
             Ejercicios
-          </Button>
+          </Button> */}
         </div>
 
         <div className="mt-8">{renderContent()}</div>

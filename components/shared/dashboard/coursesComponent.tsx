@@ -67,6 +67,7 @@ export default function CoursesComponent() {
         name={course?.name ?? ""}
         image={course?.image ?? ""}
         description={course?.description ?? ""}
+        zoomLink={course?.zoomLink ?? ""}
         onBack={() => setSelectedCourse(null)}
       />
     );
@@ -83,17 +84,6 @@ export default function CoursesComponent() {
               className="flex flex-col p-4 space-y-4 cursor-pointer shadow-2xl grow"
               onClick={() => setSelectedCourse(course.id)}
             >
-              {course.zoomLink && (
-                <a
-                  href={course.zoomLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 inline-block text-blue-600 hover:underline"
-                >
-                  Ir al Zoom
-                </a>
-              )}
-
               <Image
                 src={course.image}
                 alt={course.name}
