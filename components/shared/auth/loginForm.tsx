@@ -49,7 +49,9 @@ export default function LoginForm() {
   const { login } = useAuthStore();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { email, password } = data;
+    const email = data.email.toLowerCase();
+    const password = data.password;
+    
     try {
       await login(email, password);
 
