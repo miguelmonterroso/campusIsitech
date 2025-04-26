@@ -193,7 +193,7 @@ export async function POST(req: Request) {
         <td style="padding: 20px;">
           <h2>Gracias por registrarte en Isitech.</h2>
           <p>Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
-          <p><a href="https://campus-isitech.vercel.app/" class="button">Comienza tu aventura aquí</a></p>
+          <p><a href="https://www.isitech.codes/auth" class="button">Comienza tu aventura aquí</a></p>
         </td>
       </tr>
       <tr>
