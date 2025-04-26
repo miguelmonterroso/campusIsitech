@@ -124,85 +124,93 @@ export async function POST(req: Request) {
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4; 
+        background-color: #0B0E23;
         margin: 0;
         padding: 0;
+        color: #ffffff;
       }
       .container {
         width: 100%;
         max-width: 600px;
-        margin: 0 auto;
-        background-color: #ffffff; 
-        color: #333333; 
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 30px auto;
+        background-color: #101541;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 0 25px rgba(161, 38, 250, 0.2);
       }
       .header {
-        background: linear-gradient(90deg, #FC9741 55%, #FB504F 100%);
-        padding: 20px;
+        background: linear-gradient(135deg, #0F4DFA, #A126FA);
         text-align: center;
-        border-radius: 8px 8px 0 0;
+        padding: 30px 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 26px;
+        color: #ffffff;
+      }
+      .content {
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .content h2 {
+        color: #FC9741;
+        font-size: 22px;
+        margin-bottom: 15px;
+      }
+      .content p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #ddd;
       }
       .button {
         display: inline-block;
-        padding: 10px 20px;
-        background: linear-gradient(90deg, #FC9741 55%, #FB504F 100%);
+        margin-top: 25px;
+        padding: 14px 28px;
+        background: linear-gradient(to right, #A126FA, #0F4DFA);
         color: #fff;
         text-decoration: none;
-        border-radius: 5px;
+        border-radius: 8px;
         font-weight: bold;
+        font-size: 15px;
       }
       .footer {
-        background-color: #e2e2e2;
         text-align: center;
-        padding: 10px;
+        background-color: #0F4DFA;
+        padding: 20px;
         font-size: 12px;
+        color: #ffffff;
+      }
+      .footer img {
+        width: 120px;
+        margin-bottom: 10px;
       }
       @media only screen and (max-width: 600px) {
         .container {
-          width: 100% !important;
-          padding: 10px;
-        }
-        .header {
-          font-size: 18px !important;
+          margin: 10px;
         }
         .button {
-          width: 100% !important;
-          padding: 15px;
-          text-align: center;
-        }
-        .footer {
-          padding: 20px !important;
-        }
-        img {
-          width: 100% !important;
-          max-width: 250px;
-          height: auto !important;
+          width: 100%;
+          display: block;
         }
       }
     </style>
   </head>
   <body>
-    <table class="container">
-      <tr>
-        <td class="header">
-          <h1>Bienvenido a Isitech, ${name}!</h1>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 20px;">
-          <h2>Gracias por registrarte en Isitech.</h2>
-          <p>Estamos muy emocionados de que formes parte de nuestra comunidad de aprendizaje ;)</p>
-          <p><a href="https://www.isitech.codes/auth" class="button">Comienza tu aventura aquí</a></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="footer">
-          <img src="https://campus-isitech.vercel.app/isitech.png" alt="logo.png">
-          <p>Este es un correo automático. Si tienes alguna duda, no dudes en contactarnos.</p>
-        </td>
-      </tr>
-    </table>
+    <div class="container">
+      <div class="header">
+        <h1>¡Bienvenido a Isitech, ${name}!</h1>
+      </div>
+      <div class="content">
+        <h2>Estás a punto de transformar tu futuro</h2>
+        <p>Gracias por registrarte. En Isitech aprenderás habilidades que te abrirán nuevas oportunidades profesionales. 🚀</p>
+        <p>Haz clic en el siguiente botón para acceder a tu cuenta y comenzar tu camino en tecnología:</p>
+        <a href="https://www.isitech.codes/auth" class="button">Empezar ahora</a>
+      </div>
+      <div class="footer">
+        <img src="https://campus-isitech.vercel.app/isitech.png" alt="Isitech Logo">
+        <p>Este es un correo automático. Si necesitas ayuda, contáctanos en cualquier momento.</p>
+      </div>
+    </div>
   </body>
 </html>
     `;
