@@ -75,7 +75,7 @@ export default function HeroVideoDialog({
   thumbnailSrc,
   thumbnailAlt = "Video thumbnail",
   className,
-  useNativePlayer
+  useNativePlayer,
 }: HeroVideoProps) {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const selectedAnimation = animationVariants[animationStyle];
@@ -127,31 +127,24 @@ export default function HeroVideoDialog({
                 <XIcon className="size-5" />
               </motion.button>
               <div className="size-full border-2 border-white rounded-2xl overflow-hidden isolate z-[1] relative">
-                {/* <iframe
-                  src={videoSrc}
-                  className="size-full rounded-2xl"
-                  allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                ></iframe> */}
+  {useNativePlayer ? (
+    <video
+      src={videoSrc}
+      controls
+      autoPlay
+      className="size-full rounded-2xl"
+      preload="metadata"
+    />
+  ) : (
+    <iframe
+      src={videoSrc}
+      className="size-full rounded-2xl"
+      allowFullScreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    />
+  )}
+</div>
 
-{useNativePlayer ? (
-  <video
-    src={videoSrc}
-    controls
-    autoPlay
-    className="size-full rounded-2xl"
-    preload="metadata"
-  />
-) : (
-  <iframe
-    src={videoSrc}
-    className="size-full rounded-2xl"
-    allowFullScreen
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  />
-)}
-
-              </div>
             </motion.div>
           </motion.div>
         )}
