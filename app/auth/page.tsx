@@ -10,7 +10,6 @@ export default function authPage(){
         <div className="flex flex-col lg:flex-row rounded-xl h-screen">
         <div className="lg:w-1/2 p-10 flex flex-col items-center justify-center relative">
         <Image src="/isitech.png" width={150} height={150} alt="isitechLogo"/>
-        Preview
         <AnimatedGridPattern
         numSquares={30}
         maxOpacity={0.1}

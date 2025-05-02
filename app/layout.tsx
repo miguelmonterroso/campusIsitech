@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     title: "Isitech Campus - Aprende a Programar Isi",
     description:
       "Isitech Campus ofrece una experiencia de aprendizaje única en programación. Explora nuestros cursos, tutoriales y recursos exclusivos para convertirte en un experto en desarrollo de software.",
-    url: "campus-isitech.vercel.app",
+    url: "isitech.codes",
     type: "website",
     images: [
       {
-        url: "campus-isitech.vercel.app/og-image.jpg",
+        url: "isitech.codes/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Isitech Campus - Aprende a Programar con los Mejores Recursos",
