@@ -59,14 +59,6 @@ const useAuthStore = create<AuthState>()(
 
         if (!token) return null;
 
-        const test = await fetch("/api/protected-test", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (test.status !== 401) {
-          return token;
-        }
-
         const res = await fetch("/api/users/refresh", {
           credentials: "include",
         });
@@ -76,7 +68,9 @@ const useAuthStore = create<AuthState>()(
           const newToken = data.accessToken;
 
           if (state.user) {
-            set({ user: { ...state.user, token: newToken } });
+            set({
+              user: { ...state.user, token: newToken },
+            });
           }
 
           return newToken;
