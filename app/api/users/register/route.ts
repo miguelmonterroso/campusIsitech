@@ -198,7 +198,7 @@ export async function POST(req: Request) {
       </tr>
       <tr>
         <td class="footer">
-          <img src="https://campus-isitech.vercel.app/isitech.png" alt="logo.png">
+          <img src="https://isitech.codes/isitech.png" alt="logo.png">
           <p>Este es un correo automático. Si tienes alguna duda, no dudes en contactarnos.</p>
         </td>
       </tr>
