@@ -14,13 +14,15 @@ type AuthState = {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  getValidToken: () => Promise<string | null>;
 };
 
 const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       isAuthenticated: false,
+
       login: async (email: string, password: string) => {
         try {
           const response = await fetch("/api/users/login", {
@@ -45,10 +47,47 @@ const useAuthStore = create<AuthState>()(
           throw new Error("Inicio de sesión fallido. Verifica tus credenciales.");
         }
       },
-      logout: () => set({ user: null, isAuthenticated: false }),
+
+      logout: () => {
+        fetch("/api/users/logout", { method: "POST" });
+        set({ user: null, isAuthenticated: false });
+      },
+
+      getValidToken: async () => {
+        const state = get();
+        const token = state.user?.token;
+
+        if (!token) return null;
+
+        const test = await fetch("/api/protected-test", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (test.status !== 401) {
+          return token;
+        }
+
+        const res = await fetch("/api/users/refresh", {
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const newToken = data.accessToken;
+
+          if (state.user) {
+            set({ user: { ...state.user, token: newToken } });
+          }
+
+          return newToken;
+        }
+
+        set({ user: null, isAuthenticated: false });
+        return null;
+      },
     }),
     {
-      name: "auth-storage",
+      name: "auth-storage", 
     }
   )
 );
