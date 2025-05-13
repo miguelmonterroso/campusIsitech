@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import BlurFade from "@/components/ui/blur-fade";
 import CourseInformation from "@/components/courses/courseInformation";
-import useAuthStore from "@/store/auth/AuthStore";
+import { fetchWithAuth } from "@/hooks/fetchWithAuth";
 
 interface Course {
   id: number;
@@ -21,18 +21,11 @@ export default function CoursesComponent() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { user } = useAuthStore();
 
   useEffect(() => {
     const fetchCourses = async () => {
-      if (!user?.token) return;
-
       try {
-        const response = await fetch("/api/courses", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const response = await fetchWithAuth("/api/courses");
 
         if (!response.ok) {
           throw new Error("Error al obtener los cursos.");
@@ -40,7 +33,6 @@ export default function CoursesComponent() {
 
         const data: Course[] = await response.json();
         setCourses(data);
-        console.log(data);
       } catch (error) {
         console.error("Error al obtener los cursos:", error);
       } finally {
@@ -49,7 +41,7 @@ export default function CoursesComponent() {
     };
 
     fetchCourses();
-  }, [user?.token]);
+  }, []);
 
   if (loading) {
     return (
