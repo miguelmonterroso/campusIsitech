@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
+import { cookies } from "next/headers";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const refreshToken = req.headers.get("cookie")
-      ?.split("; ")
-      .find(c => c.startsWith("refreshToken="))
-      ?.split("=")[1];
+    const cookieStore = cookies();
+    const refreshToken = cookieStore.get("refreshToken")?.value;
 
     if (!refreshToken) {
       return NextResponse.json({ error: "No se encontró refresh token." }, { status: 401 });
