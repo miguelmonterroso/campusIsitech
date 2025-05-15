@@ -32,6 +32,7 @@ export async function OPTIONS() {
       "Access-Control-Allow-Origin": "https://www.isitech.com.gt",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Credentials": "true"
     },
   });
 }
@@ -104,7 +105,7 @@ export async function POST(req: Request) {
         course: { connect: { id: schedule.course.id } },
         amount: isScholarship ? 0 : schedule.course.price,
         dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-        status: isScholarship ? "PAID" : "PAID", // solo si agregaste ese estado
+        status: isScholarship ? "PAID" : "PAID",
       },
     });
 
