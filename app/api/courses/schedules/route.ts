@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
+import { getCorsHeaders } from "@/lib/cors";
 
 interface JwtPayload {
   id: number;
@@ -19,27 +20,39 @@ const createCourseScheduleSchema = z.object({
   zoomLink: z.string().url("El Zoom link debe ser una URL válida").optional(),
 });
 
+export async function OPTIONS(req: Request) {
+  const headers = getCorsHeaders(req);
+  return new Response(null, {
+    status: 204,
+    headers,
+  });
+}
+
 export async function POST(req: Request) {
+  const headers = getCorsHeaders(req);
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
         { error: "No autorizado. Se requiere un token." },
-        { status: 401 }
+        { status: 401, headers }
       );
     }
+
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+
     if (!decoded) {
       return NextResponse.json(
         { error: "Token inválido." },
-        { status: 401 }
+        { status: 401, headers }
       );
     }
+
     if (decoded.role !== "INSTRUCTOR") {
       return NextResponse.json(
         { error: "Acceso denegado. Solo los instructores pueden crear opciones de horario." },
-        { status: 403 }
+        { status: 403, headers }
       );
     }
 
@@ -59,44 +72,74 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { message: "Opción de horario creada exitosamente.", schedule },
-      { status: 201 }
+      { status: 201, headers }
     );
   } catch (error: unknown) {
     console.error("Error en el endpoint POST de course-schedules:", error);
-    if (error instanceof jwt.JsonWebTokenError) {
-      return NextResponse.json(
-        { error: "Token inválido o expirado." },
-        { status: 401 }
-      );
-    }
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-    return NextResponse.json(
-      { error: "Ocurrió un error desconocido." },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "Error desconocido";
+    const status = error instanceof jwt.JsonWebTokenError ? 401 : 500;
+    return NextResponse.json({ error: message }, { status, headers });
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const headers = getCorsHeaders(req);
   try {
+    const { searchParams } = new URL(req.url);
+    const courseId = searchParams.get("courseId");
+
     const schedules = await prisma.courseSchedule.findMany({
+      where: {
+        ...(courseId ? { courseId: parseInt(courseId) } : {}),
+        startDate: {
+          gte: new Date(),
+        },
+        cupo: {
+          gt: 0,
+        },
+      },
       include: {
         course: {
           select: { id: true, name: true },
         },
-        instructor: {
-          select: { id: true, name: true, email: true },
-        },
+      },
+      orderBy: {
+        startDate: "asc",
       },
     });
-    return NextResponse.json(schedules, { status: 200 });
-  } catch (error: unknown) {
+
+    return NextResponse.json(schedules, { status: 200, headers });
+  } catch (error) {
     console.error("Error en el endpoint GET de course-schedules:", error);
     return NextResponse.json(
       { error: "Error al obtener las opciones de horario." },
-      { status: 500 }
+      { status: 500, headers }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  const headers = getCorsHeaders(req);
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "Falta el ID del horario a eliminar." }, { status: 400, headers });
+    }
+
+    const schedule = await prisma.courseSchedule.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return NextResponse.json({ message: "Horario eliminado exitosamente.", schedule }, { status: 200, headers });
+  } catch (error: unknown) {
+    console.error("Error al eliminar el horario:", error);
+    return NextResponse.json(
+      { error: "Error al eliminar el horario. Asegúrate de que el ID exista." },
+      { status: 500, headers }
     );
   }
 }
